@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: UniUni Platform Client Batches Labels API
+  description: API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.
+  version: 1.0.0
+  contact:
+    name: UniUni Retail Support
+    email: retailsupport@uniuni.com
+servers:
+- url: https://api.ship.uniuni.com/prod
+  description: Production
+- url: https://api-sandbox.ship.uniuni.com
+  description: Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Labels
+  description: Retrieve shipping and batch labels as Base64-encoded PDFs.
+paths:
+  /client/label/{id}:
+    get:
+      tags:
+      - Labels
+      summary: Get label
+      description: Retrieves a shipping or batching label as a Base64-encoded PDF.
+      operationId: getLabel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The orderNumber (for shipping labels) or batchNumber (for batch labels).
+        schema:
+          type: string
+      - name: labelType
+        in: query
+        required: true
+        description: Type of label to retrieve.
+        schema:
+          type: string
+          enum:
+          - shipping
+          - batching
+      responses:
+        '200':
+          description: Label PDF or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/LabelResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Label retrieved
+                  value:
+                    message: Success
+                    code: 0
+                    data:
+                      headers:
+                        Content-Type: application/pdf
+                        Content-Disposition: attachment; filename="UR07240000000004901_shipping_labels_2025-07-31.pdf"
+                      body: JVBERi0xLjMKJf////8K...
+                notFound:
+                  summary: Not found
+                  value:
+                    message: No batch found for the given batch number
+                    code: 1014
+                    data: null
+components:
+  schemas:
+    LabelResponseData:
+      type: object
+      properties:
+        headers:
+          type: object
+          properties:
+            Content-Type:
+              type: string
+              example: application/pdf
+            Content-Disposition:
+              type: string
+              example: attachment; filename="label.pdf"
+          required:
+          - Content-Type
+          - Content-Disposition
+        body:
+          type: string
+          description: Base64-encoded PDF content.
+      required:
+      - headers
+      - body
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API access token generated from the UniUni Platform dashboard.

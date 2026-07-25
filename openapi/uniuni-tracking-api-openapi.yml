@@ -1,0 +1,252 @@
+openapi: 3.1.0
+info:
+  title: UniUni Platform Client Batches Tracking API
+  description: API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.
+  version: 1.0.0
+  contact:
+    name: UniUni Retail Support
+    email: retailsupport@uniuni.com
+servers:
+- url: https://api.ship.uniuni.com/prod
+  description: Production
+- url: https://api-sandbox.ship.uniuni.com
+  description: Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Tracking
+  description: Track shipment status and scan events.
+paths:
+  /client/tracking:
+    get:
+      tags:
+      - Tracking
+      summary: TrackShipmentbyTrackingId
+      description: Retrieves tracking information for a shipment by its tracking ID, including status, recipient, address, dimensions, and scan events.
+      operationId: trackShipment
+      parameters:
+      - name: trackingId
+        in: query
+        required: true
+        description: The shipment tracking ID. Must be 19 characters starting with `UR` (e.g. `UR06250000000000351`) or 19 characters starting with `URB` (batch tracking ID).
+        schema:
+          type: string
+          pattern: ^(UR\d{17}|URB\d{16})$
+        example: UR06250000000000351
+      responses:
+        '200':
+          description: Tracking info or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/TrackingResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Tracking retrieved
+                  value:
+                    message: Tracking shipment successfully
+                    code: 0
+                    data:
+                      trackingId: UR06250000000000351
+                      status: RECEIVED
+                      orderNumber: UNI05893840E
+                      recipient:
+                        fullName: Jane Doe
+                        email: jane@example.com
+                      destination:
+                        address1: 5 Chagall Dr
+                        city: Vaughan
+                        province: 'ON'
+                        postalCode: L4J 9B2
+                        country: Canada
+                      signatureRequired: false
+                      weight:
+                        value: 1
+                        weightUnit: LB
+                      dimensions:
+                        length: 1
+                        width: 1
+                        height: 1
+                        dimensionUnit: INCH
+                      events:
+                      - statusCode: RECEIVED
+                        timestamp: 1750878222724
+                        location:
+                          name: 423 Four Valley Dr
+                          lat: 43.8361
+                          lng: -79.5686
+                notFound:
+                  summary: Shipment not found
+                  value:
+                    message: 'Track failed: Shipment not found: URB0715000000000757'
+                    code: 1031
+                    data: null
+components:
+  schemas:
+    TrackingResponseData:
+      type: object
+      properties:
+        trackingId:
+          type: string
+          description: Shipment tracking ID.
+        status:
+          type: string
+          description: Current shipment status.
+        statusCode:
+          type: integer
+          description: Internal status code.
+        orderNumber:
+          type: string
+          description: Order number.
+        labelCreatedAt:
+          type: integer
+          description: Unix timestamp (ms) when label was created.
+        recipient:
+          type: object
+          properties:
+            fullName:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+              format: email
+          required:
+          - fullName
+        destination:
+          $ref: '#/components/schemas/Address'
+        batchId:
+          type: string
+        note:
+          type: string
+        signatureRequired:
+          type: boolean
+        weight:
+          $ref: '#/components/schemas/Weight'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingEvent'
+      required:
+      - trackingId
+      - status
+      - orderNumber
+    TrackingEvent:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Shipment status string at time of event (e.g. `OUT_FOR_DELIVERY`, `DELIVERED`).
+        statusCode:
+          type: integer
+          description: Numeric status code corresponding to the status.
+        timestamp:
+          type: integer
+          description: Unix timestamp in milliseconds.
+        location:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Location name.
+            lat:
+              type: number
+              description: Latitude.
+            lng:
+              type: number
+              description: Longitude.
+        description:
+          type: string
+          description: Additional notes about the event.
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          description: Weight value.
+        weightUnit:
+          type: string
+          enum:
+          - G
+          - KG
+          - LB
+          - OZ
+          description: Unit of weight.
+      required:
+      - value
+      - weightUnit
+    Dimensions:
+      type: object
+      properties:
+        length:
+          type: number
+          description: Length.
+        width:
+          type: number
+          description: Width.
+        height:
+          type: number
+          description: Height.
+        dimensionUnit:
+          type: string
+          enum:
+          - CM
+          - INCH
+          - M
+          - FT
+          description: Unit of dimension.
+    Address:
+      type: object
+      properties:
+        address1:
+          type: string
+          description: Address line 1.
+        address2:
+          type: string
+          description: Address line 2.
+        address3:
+          type: string
+          description: Address line 3.
+        city:
+          type: string
+          description: City.
+        province:
+          type: string
+          description: Province or state code.
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+        country:
+          type: string
+          description: Country code (e.g. CA, US).
+        latitude:
+          type: number
+          description: Latitude.
+        longitude:
+          type: number
+          description: Longitude.
+      required:
+      - address1
+      - city
+      - province
+      - postalCode
+      - country
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API access token generated from the UniUni Platform dashboard.

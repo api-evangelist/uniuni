@@ -1,0 +1,184 @@
+openapi: 3.1.0
+info:
+  title: UniUni Platform Client Batches Webhooks API
+  description: API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.
+  version: 1.0.0
+  contact:
+    name: UniUni Retail Support
+    email: retailsupport@uniuni.com
+servers:
+- url: https://api.ship.uniuni.com/prod
+  description: Production
+- url: https://api-sandbox.ship.uniuni.com
+  description: Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Webhooks
+  description: Receive real-time shipment status updates.
+paths:
+  /webhook/test:
+    post:
+      tags:
+      - Webhooks
+      summary: Test Webhook
+      description: Sends a test webhook payload to your configured webhook endpoint to verify your integration.
+      operationId: testWebhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookPayload'
+              example:
+                event: shipment.status_updated
+                data:
+                  address:
+                    address1: 123 Main St
+                    address2: Suite 100
+                    city: Vancouver
+                    province: BC
+                    postalCode: V6B 1A1
+                    country: CA
+                  status: DELIVERED
+                  statusCode: 203
+                  trackingId: UR11170000000000001
+                  updatedAt: '2025-11-28T00:05:25.917Z'
+                  proofOfDelivery:
+                    trackingNumber: UR11170000000023641
+                    recipient: John Doe
+                    deliveryDate: '2025-11-28'
+                    deliveryTime: 00:05:25
+                    pods:
+                    - https://delivery-service-api.uniuni.ca/images/abcd001
+                    - https://delivery-service-api.uniuni.ca/images/abcd002
+            example:
+              event: shipment.status_updated
+              data:
+                address:
+                  address1: 123 Main St
+                  address2: Suite 100
+                  city: Vancouver
+                  province: BC
+                  postalCode: V6B 1A1
+                  country: CA
+                status: DELIVERED
+                statusCode: 203
+                trackingId: UR11170000000023641
+                updatedAt: '2025-11-28T00:05:25.917Z'
+                proofOfDelivery:
+                  recipient: John Doe
+                  deliveryDate: '2025-11-28'
+                  deliveryTime: 00:05:25
+                  pods:
+                  - https://delivery-service-api.uniuni.ca/images/abcd001
+                  - https://delivery-service-api.uniuni.ca/images/abcd002
+      responses:
+        '200':
+          description: Webhook test result
+      security: []
+components:
+  schemas:
+    WebhookPayload:
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - shipment.status_updated
+          - shipment.custom_event
+          description: Webhook event type.
+        version:
+          type: string
+          description: Schema version of the webhook payload.
+        data:
+          type: object
+          properties:
+            objectType:
+              type: string
+              enum:
+              - Shipment
+              description: Object type discriminator.
+            trackingId:
+              type: string
+              description: Shipment tracking ID.
+            status:
+              type: string
+              description: New shipment status.
+            statusCode:
+              type: integer
+              description: Internal status code.
+            updatedAt:
+              type: string
+              format: date-time
+            address:
+              $ref: '#/components/schemas/Address'
+            transferCarrierName:
+              type: string
+              description: Name of the transfer carrier when package is handed off.
+            transferCarrierTrackingId:
+              type: string
+              description: Tracking ID assigned by the transfer carrier.
+            proofOfDelivery:
+              type: object
+              description: Included when status is DELIVERED.
+              properties:
+                recipient:
+                  type: string
+                  description: Name of person who received the parcel.
+                deliveryDate:
+                  type: string
+                  format: date
+                  description: YYYY-MM-DD.
+                deliveryTime:
+                  type: string
+                  description: HH:mm:ss.
+                trackingNumber:
+                  type: string
+                  description: Tracking number used for proof of delivery.
+                pods:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  description: Proof of delivery image URLs.
+    Address:
+      type: object
+      properties:
+        address1:
+          type: string
+          description: Address line 1.
+        address2:
+          type: string
+          description: Address line 2.
+        address3:
+          type: string
+          description: Address line 3.
+        city:
+          type: string
+          description: City.
+        province:
+          type: string
+          description: Province or state code.
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+        country:
+          type: string
+          description: Country code (e.g. CA, US).
+        latitude:
+          type: number
+          description: Latitude.
+        longitude:
+          type: number
+          description: Longitude.
+      required:
+      - address1
+      - city
+      - province
+      - postalCode
+      - country
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API access token generated from the UniUni Platform dashboard.

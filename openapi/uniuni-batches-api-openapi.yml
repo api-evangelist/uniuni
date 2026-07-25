@@ -1,0 +1,497 @@
+openapi: 3.1.0
+info:
+  title: UniUni Platform Client Batches API
+  description: API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.
+  version: 1.0.0
+  contact:
+    name: UniUni Retail Support
+    email: retailsupport@uniuni.com
+servers:
+- url: https://api.ship.uniuni.com/prod
+  description: Production
+- url: https://api-sandbox.ship.uniuni.com
+  description: Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Batches
+  description: Group purchased shipments into batches for drop-off or pickup.
+paths:
+  /client/batch/{batchNumber}/addShipment:
+    post:
+      tags:
+      - Batches
+      summary: Add shipments to a batch
+      description: Adds one or more purchased shipments to an existing batch. Each shipment can only belong to one batch — adding a shipment already in another batch moves it.
+      operationId: addShipmentsToBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchShipmentsRequest'
+              example:
+                shipments:
+                - UNI02947917E
+                - UNI0114576F0
+            example:
+              shipments:
+              - UNI02947917E
+              - UNI0114576F0
+      responses:
+        '200':
+          description: Shipments added or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/BatchMutationResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipments added
+                  value:
+                    message: Shipments added to batch successfully
+                    code: 0
+                    data:
+                      batchNumber: URB0714000000000727
+                      batchName: test
+                      status: PENDING
+                      printedLabel: false
+                      shipmentCount: 2
+                notFound:
+                  summary: Shipments not found
+                  value:
+                    message: 'Shipments with following order numbers not found: UNI02947917E, UNI0114576F0'
+                    code: 1002
+                    data: null
+  /client/batch/create:
+    post:
+      tags:
+      - Batches
+      summary: Create a batch
+      description: Creates a new batch. You can optionally include purchased shipments at creation time, or create an empty batch and add shipments later.
+      operationId: createBatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBatchRequest'
+              example:
+                batchName: test-111
+                shipments:
+                - UNI02947917E
+            example:
+              batchName: Monday Dropoff
+              shipments:
+              - UNI02947917E
+      responses:
+        '200':
+          description: Batch created or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/Batch'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Batch created
+                  value:
+                    message: Success
+                    code: 0
+                    data:
+                      batchNumber: URB0717000000000837
+                      batchName: Monday Dropoff
+                      status: PENDING
+                      printedLabel: false
+                      createdAt: '2025-07-17T21:55:05.526Z'
+                      updatedAt: '2025-07-17T21:55:05.697Z'
+                      shipmentCount: 1
+                unpaidShipments:
+                  summary: Unpaid shipments
+                  value:
+                    message: Unpaid shipments are found
+                    code: 1002
+                    data: null
+  /client/batch/{batchNumber}/delete:
+    post:
+      tags:
+      - Batches
+      summary: Delete a batch
+      description: Deletes a batch. Only batches that have been received can be deleted.
+      operationId: deleteBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      responses:
+        '200':
+          description: Batch deleted or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    type: object
+                    nullable: true
+                    description: Always null for this operation.
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Batch deleted
+                  value:
+                    message: Batch deleted successfully
+                    code: 0
+                    data: null
+                notFound:
+                  summary: Batch not found
+                  value:
+                    message: Batch not found
+                    code: 1009
+                    data: null
+  /client/batch:
+    get:
+      tags:
+      - Batches
+      summary: List all batches
+      description: Retrieves a paginated list of batches.
+      operationId: listBatches
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: isNotInPickup
+        in: query
+        description: If true, only returns batches that are not in pickup status.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Paginated list of batches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/ListBatchesResponseData'
+                required:
+                - message
+                - code
+              example:
+                message: Success
+                code: 0
+                data:
+                  batches:
+                  - batchNumber: URB0805000000000947
+                    batchName: final-test
+                    status: PENDING
+                    printedLabel: true
+                    createdAt: '2025-08-05T17:31:27.157Z'
+                    updatedAt: '2025-08-05T17:34:32.262Z'
+                    shipmentCount: 1
+                  pagination:
+                    page: 1
+                    pageSize: 10
+                    count: 25
+  /client/batch/{batchNumber}/removeShipment:
+    post:
+      tags:
+      - Batches
+      summary: Remove shipments from a batch
+      description: Removes one or more shipments from a batch.
+      operationId: removeShipmentsFromBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchShipmentsRequest'
+              example:
+                shipments:
+                - UNI033642B16
+            example:
+              shipments:
+              - UNI033642B16
+      responses:
+        '200':
+          description: Shipments removed or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/BatchMutationResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipments removed
+                  value:
+                    message: Shipments removed from batch successfully
+                    code: 0
+                    data:
+                      batchNumber: URB0717000000000837
+                      batchName: test-17
+                      status: PENDING
+                      printedLabel: false
+                      shipmentCount: 0
+                      shipments: []
+                notInBatch:
+                  summary: Shipments not in batch
+                  value:
+                    message: Shipments are not found in this batch
+                    code: 1009
+                    data: null
+  /client/batch/{batchNumber}:
+    get:
+      tags:
+      - Batches
+      summary: Retrieve a batch
+      description: Retrieves detailed information about a specific batch, including its list of shipment order numbers.
+      operationId: retrieveBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      responses:
+        '200':
+          description: Batch details or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/BatchResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Batch retrieved
+                  value:
+                    message: Success
+                    code: 0
+                    data:
+                      batchNumber: URB0714000000000687
+                      batchName: Test batch 1 7-14-2025
+                      status: RECEIVED
+                      printedLabel: false
+                      createdAt: '2025-07-14T17:59:27.645Z'
+                      updatedAt: '2025-07-14T18:53:57.669Z'
+                      shipmentCount: 1
+                      shipments:
+                      - UNI07787536D
+                notFound:
+                  summary: Batch not found
+                  value:
+                    message: Batch not found
+                    code: 1009
+                    data: null
+components:
+  schemas:
+    BatchResponseData:
+      type: object
+      properties:
+        batchNumber:
+          type: string
+          description: Unique batch identifier.
+        batchName:
+          type: string
+          description: Batch name.
+          nullable: true
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+          description: Whether the batch label has been printed.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        shipmentCount:
+          type: integer
+          description: Number of shipments in the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of shipment order numbers.
+      required:
+      - batchNumber
+      - status
+      - printedLabel
+      - shipmentCount
+    CreateBatchRequest:
+      type: object
+      properties:
+        batchName:
+          type: string
+          description: Name for the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of order numbers to include. Only purchased shipments can be added.
+    ListBatchesResponseData:
+      type: object
+      properties:
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Batch'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - batches
+      - pagination
+    Batch:
+      type: object
+      properties:
+        batchNumber:
+          type: string
+          description: Unique batch identifier.
+        batchName:
+          type: string
+          description: Batch name.
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+          description: Whether the batch label has been printed.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        shipmentCount:
+          type: integer
+          description: Number of shipments in the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of shipment order numbers.
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        count:
+          type: integer
+          description: Total number of records.
+    BatchShipmentsRequest:
+      type: object
+      properties:
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of order numbers.
+      required:
+      - shipments
+    BatchMutationResponseData:
+      type: object
+      description: Partial batch summary returned after add/remove shipment operations.
+      properties:
+        batchNumber:
+          type: string
+        batchName:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+        shipmentCount:
+          type: integer
+      required:
+      - batchNumber
+      - status
+      - printedLabel
+      - shipmentCount
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API access token generated from the UniUni Platform dashboard.
