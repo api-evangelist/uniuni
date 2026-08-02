@@ -1,0 +1,37 @@
+generated: '2026-07-21'
+method: searched
+source: https://help.ship.uniuni.com/en/api/introduction
+docs:
+  - https://help.ship.uniuni.com/en/api/introduction
+  - https://help.ship.uniuni.com/en/api/create-access-token
+name: UniUni Platform sandbox
+summary: >-
+  The UniUni Platform Client API ships a fully isolated sandbox environment. Integrations are
+  tested against the sandbox base URL with no charges incurred; sandbox data is isolated from
+  production and can be reset. Sandbox accounts are created on a separate portal host and use
+  their own API access tokens.
+environments:
+  - name: sandbox
+    base_url: https://api-sandbox.ship.uniuni.com/client/
+    portal: https://sandbox.unigo.ca/integrations/rest-api
+    notes: No charges incurred. Sandbox data is isolated and can be reset without affecting production.
+  - name: production
+    base_url: https://api.ship.uniuni.com/prod/client/
+    portal: https://ship.uniuni.com/integrations/rest-api
+test_values:
+  - kind: credit_card
+    value: '4242 4242 4242 4242'
+    notes: >-
+      Published sandbox test card for adding wallet test credits — use any expiry and CVC
+      (documented on the API introduction page).
+token_model:
+  notes: >-
+    Sandbox and production tokens are generated separately from each environment's REST API
+    integration page; up to 5 active tokens per environment.
+legacy_integration_api:
+  qa_base_url: https://prm-api.qa.uniuni.com
+  production_base_url: https://prm-api.uniuni.com
+  docs: https://docs.uniuni.com/
+  notes: >-
+    The legacy UniUni Integration API (Postman-documented) exposes a separate QA host used as
+    its testing environment.

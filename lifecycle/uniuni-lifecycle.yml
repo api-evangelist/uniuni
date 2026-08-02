@@ -1,0 +1,28 @@
+generated: '2026-07-21'
+method: searched
+source: https://help.ship.uniuni.com/
+versioning:
+  scheme: none-documented
+  current: 1.0.0
+  notes: >-
+    The Platform Client API OpenAPI is versioned 1.0.0 with no URI/header versioning contract.
+    The legacy Integration API (docs.uniuni.com) mixes unversioned and /version2/ path prefixes.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No deprecation policy or RFC 8594 Sunset header support is published.
+sla:
+  url: null
+  notes: >-
+    No public API SLA. Small Business Delivery Services Terms & Conditions (updated
+    2025-11-07) govern the platform: https://help.ship.uniuni.com/en/legal/terms-and-conditions
+status_page: null
+status_page_notes: >-
+  No first-party status page found (status.uniuni.com and status.ship.uniuni.com do not
+  resolve, probed 2026-07-21). Carrier status is visible via aggregators only.
+changelog: null
+changelog_notes: No dated public API changelog is published.
+environments:
+  - sandbox: https://api-sandbox.ship.uniuni.com/client/
+  - production: https://api.ship.uniuni.com/prod/client/
+deprecated_operations: []

@@ -1,0 +1,105 @@
+# UniUni Platform Docs
+
+## Docs
+
+- [Create Access Token](https://help.ship.uniuni.com/en/api/create-access-token.md): Generate API access tokens to authenticate your requests to the UniUni Platform API
+- [Add shipments to a batch](https://help.ship.uniuni.com/en/api/endpoints/batches/add-shipments.md): Adds one or more purchased shipments to an existing batch. Each shipment can only belong to one batch — adding a shipment already in another batch moves it.
+- [Create a batch](https://help.ship.uniuni.com/en/api/endpoints/batches/create.md): Creates a new batch. You can optionally include purchased shipments at creation time, or create an empty batch and add shipments later.
+- [Delete a batch](https://help.ship.uniuni.com/en/api/endpoints/batches/delete.md): Deletes a batch. Only batches that have been received can be deleted.
+- [List all batches](https://help.ship.uniuni.com/en/api/endpoints/batches/list.md): Retrieves a paginated list of batches.
+- [Remove shipments from a batch](https://help.ship.uniuni.com/en/api/endpoints/batches/remove-shipments.md): Removes one or more shipments from a batch.
+- [Retrieve a batch](https://help.ship.uniuni.com/en/api/endpoints/batches/retrieve.md): Retrieves detailed information about a specific batch, including its list of shipment order numbers.
+- [Get label](https://help.ship.uniuni.com/en/api/endpoints/labels/get.md): Retrieves a shipping or batching label as a Base64-encoded PDF.
+- [Create a shipment](https://help.ship.uniuni.com/en/api/endpoints/shipments/create.md): Creates a new shipment in DRAFT status. The shipment must be purchased separately before a label can be generated.
+- [Delete a shipment](https://help.ship.uniuni.com/en/api/endpoints/shipments/delete.md): Deletes a shipment. Only shipments in DRAFT status can be deleted.
+- [List all shipments](https://help.ship.uniuni.com/en/api/endpoints/shipments/list.md): Retrieves a paginated list of shipments with optional filters.
+- [Get a pricing quote](https://help.ship.uniuni.com/en/api/endpoints/shipments/pricing-quote.md): Returns estimated shipping rates for a given destination address, package dimensions, weight, and postage type. Does not create a shipment, reserve a rate, charge the merchant, or guarantee final service availability.
+- [Purchase a shipment](https://help.ship.uniuni.com/en/api/endpoints/shipments/purchase.md): Purchases a shipment and deducts the cost from your wallet balance. The shipment status changes from DRAFT to PENDING.
+- [Refund a shipment](https://help.ship.uniuni.com/en/api/endpoints/shipments/refund.md): Requests a refund for a purchased shipment.
+- [Retrieve a shipment](https://help.ship.uniuni.com/en/api/endpoints/shipments/retrieve.md): Retrieves a specific shipment by its order number.
+- [Track a shipment](https://help.ship.uniuni.com/en/api/endpoints/tracking/track.md): Retrieves tracking information for a shipment by its tracking ID, including status, recipient, address, dimensions, and scan events.
+- [Test Webhook](https://help.ship.uniuni.com/en/api/endpoints/webhooks/test-webhook.md): Sends a test webhook payload to your configured webhook endpoint to verify your integration.
+- [Introduction](https://help.ship.uniuni.com/en/api/introduction.md): Get started with the UniUni Platform Client API
+- [Shipment Status Reference](https://help.ship.uniuni.com/en/api/shipment-status-reference.md): Complete reference of all shipment status values and numeric codes used in the UniUni Platform API
+- [About Batches](https://help.ship.uniuni.com/en/batches/about.md): Organize and consolidate shipments into batches for efficient drop-off on the UniUni Platform.
+- [How to Batch](https://help.ship.uniuni.com/en/batches/how-to-batch.md): Step-by-step guide to batching shipments for pickup or drop-off on the UniUni Platform.
+- [Why Batch?](https://help.ship.uniuni.com/en/batches/why-batch.md): Understand the benefits of batching shipments and how it saves time and reduces costs.
+- [Create an Account](https://help.ship.uniuni.com/en/getting-started/create-account.md): How to create an account with UniUni.
+- [Onboarding](https://help.ship.uniuni.com/en/getting-started/onboarding.md): How to onboard with UniUni.
+- [Welcome](https://help.ship.uniuni.com/en/getting-started/welcome.md): UniUni Platform documentation for merchants and developers
+- [Overview](https://help.ship.uniuni.com/en/integrations/overview.md): Connect your sales channels and tools to UniUni Platform.
+- [About](https://help.ship.uniuni.com/en/integrations/rest-api/about.md): Integrate directly with the UniUni Platform API for custom shipping workflows
+- [About](https://help.ship.uniuni.com/en/integrations/shipstation/about.md): Two ways to connect ShipStation with UniUni Platform — choose the workflow that fits how you ship
+- [Carrier Integration](https://help.ship.uniuni.com/en/integrations/shipstation/carrier-integration.md): Add UniUni as a carrier inside ShipStation to rate shop, buy labels, and retrieve them without leaving ShipStation
+- [Order Sync Integration](https://help.ship.uniuni.com/en/integrations/shipstation/order-sync-integration.md): Pull ShipStation orders into UniUni Platform for review, validation, and label purchase
+- [About](https://help.ship.uniuni.com/en/integrations/shopify/about.md): Automatically import Shopify orders into UniUni Platform for fulfillment and shipping
+- [Connect Your Store](https://help.ship.uniuni.com/en/integrations/shopify/connect-store.md): Set up the connection between your Shopify store and UniUni Platform
+- [Manage Orders](https://help.ship.uniuni.com/en/integrations/shopify/manage-orders.md): View, filter, and edit Shopify orders imported into UniUni Platform
+- [Shipping Workflow](https://help.ship.uniuni.com/en/integrations/shopify/workflow.md): End-to-end guide from Shopify order to shipping label on UniUni Platform
+- [About](https://help.ship.uniuni.com/en/integrations/woocommerce/about.md): Connect your WooCommerce store to UniUni Platform for automated shipping and fulfillment
+- [Automated Printing](https://help.ship.uniuni.com/en/label-printing/automated-printing.md): Print labels directly to your printer from the UniUni Platform without downloading a file first.
+- [Download & Print](https://help.ship.uniuni.com/en/label-printing/download-and-print.md): Print your shipping labels by downloading the PDF to your computer and printing from there.
+- [Restricted Goods](https://help.ship.uniuni.com/en/legal/restricted-goods.md): Items that are prohibited or restricted from shipping through the UniUni Platform.
+- [Terms & Conditions](https://help.ship.uniuni.com/en/legal/terms-and-conditions.md): UniUni Small Business Delivery Services Terms & Conditions. Last Updated: November 7, 2025.
+- [Setting up auto-import](https://help.ship.uniuni.com/en/orders/auto-import.md): Automatically pull orders from your connected integrations into the Orders page.
+- [Order management](https://help.ship.uniuni.com/en/orders/overview.md): View and fulfill orders from all your connected integrations in one consolidated table.
+- [Splitting an order](https://help.ship.uniuni.com/en/orders/split-order.md): View orders that have been split into separate fulfillment groups, each shipped independently with its own tracking ID.
+- [Authentication](https://help.ship.uniuni.com/en/partner-api/authentication.md): Authenticate with the UniUni Partner API using JWT access tokens
+- [Error Handling](https://help.ship.uniuni.com/en/partner-api/error-handling.md): Understand the Partner API response format and error codes
+- [Must Read](https://help.ship.uniuni.com/en/partner-api/must-read.md): Important information about the Partner API and who it's intended for
+- [Tracking](https://help.ship.uniuni.com/en/partner-api/tracking.md): Track shipments using the UniUni Partner API
+- [Filing a Claim](https://help.ship.uniuni.com/en/services/add-on/filing-a-claim.md): How to file a Parcel Protection claim through EasyPost for lost or damaged shipments
+- [Parcel Protection](https://help.ship.uniuni.com/en/services/add-on/parcel-protection.md): Protect your packages with UniUni's Parcel Protection, powered by EasyPost
+- [Cut-off Times](https://help.ship.uniuni.com/en/services/drop-off/cut-off-times.md): Drop-off cut-off times by service type for UniUni Stores and UniUni Points.
+- [How to Drop Off](https://help.ship.uniuni.com/en/services/drop-off/drop-off-process.md): Step-by-step guide to preparing and dropping off your shipments at a UniUni location.
+- [Drop-off Locations](https://help.ship.uniuni.com/en/services/drop-off/drop-spots.md): Find UniUni drop-off locations near you and learn how our store and partner networks work.
+- [Pickup Fees & Policies](https://help.ship.uniuni.com/en/services/pickup/fees-and-policies.md): Pickup pricing, fee waivers, loose shipment rules, and additional handling charges.
+- [Pickup Services](https://help.ship.uniuni.com/en/services/pickup/pickups.md): Schedule a UniUni driver to pick up your batched shipments instead of dropping them off.
+- [Requesting a Pickup](https://help.ship.uniuni.com/en/services/pickup/requesting-a-pickup.md): Step-by-step guide to scheduling a UniUni pickup for your batched shipments.
+- [🇨🇦 Canada](https://help.ship.uniuni.com/en/services/returns/shipments/canada.md): How to handle shipment returns for Canada-origin shipments destined for Canadian addresses.
+- [🇺🇸 United States](https://help.ship.uniuni.com/en/services/returns/shipments/united-states.md): Return services are not currently available for US shipments.
+- [Program Overview](https://help.ship.uniuni.com/en/ship-and-save-select-program/overview.md): Ship more, earn more — unlock monthly account credits based on your shipment volume with the UniUni Ship & Save Select rewards program.
+- [Terms & Conditions](https://help.ship.uniuni.com/en/ship-and-save-select-program/terms-and-conditions.md): Terms and conditions for the UniUni Ship & Save Select program.
+- [About Shipments](https://help.ship.uniuni.com/en/shipments/about.md): Manage, search, and take action on all your shipments from the Shipments page on the UniUni Platform.
+- [Check & Validate Your Address](https://help.ship.uniuni.com/en/shipments/address-validation.md): Make sure your delivery address can be validated so you can get rates and buy postage.
+- [Canada vs. USA Shipping](https://help.ship.uniuni.com/en/shipments/ca-us-differences.md): A comparison of the steps and requirements for domestic Canada shipments versus cross-border US shipments.
+- [Add-Ons](https://help.ship.uniuni.com/en/shipments/canada/add-ons.md): Optional services you can attach to your Canada shipment to enhance delivery.
+- [Delivery Verification](https://help.ship.uniuni.com/en/shipments/canada/delivery-verification.md): Require the driver to collect a PIN from the recipient before completing delivery for your Canada shipment.
+- [Package Dimensions & Weight](https://help.ship.uniuni.com/en/shipments/canada/dim-weight.md): Enter the dimensions and weight of your package, or apply a saved preset.
+- [Parcel Protection](https://help.ship.uniuni.com/en/shipments/canada/parcel-protection.md): Protect your Canada shipment against loss or damage in transit.
+- [Postage](https://help.ship.uniuni.com/en/shipments/canada/postage.md): Select a service level for your Canada shipment and review the calculated shipping rate.
+- [Shipment Contents](https://help.ship.uniuni.com/en/shipments/canada/shipment-contents.md): Declare the items inside your Canada-bound shipment, including descriptions and estimated values.
+- [Shipment Destination](https://help.ship.uniuni.com/en/shipments/canada/shipment-destination.md): Enter the delivery address for your Canada-bound shipment.
+- [Review & Purchase](https://help.ship.uniuni.com/en/shipments/confirmation.md): Review your shipment summary and purchase the shipping label to complete your shipment.
+- [Creating a Shipment](https://help.ship.uniuni.com/en/shipments/create-shipment.md): Create shipments manually, by CSV upload, or through a connected integration on the UniUni Platform.
+- [Delivery Notes](https://help.ship.uniuni.com/en/shipments/delivery-notes.md): Add optional instructions for the delivery driver, such as access codes or condo entry details.
+- [Recipient Details](https://help.ship.uniuni.com/en/shipments/recipient-details.md): Enter the name, email, and contact information for the shipment recipient.
+- [Add-Ons](https://help.ship.uniuni.com/en/shipments/usa/add-ons.md): Optional services you can attach to your US shipment to enhance delivery.
+- [Delivery Verification](https://help.ship.uniuni.com/en/shipments/usa/delivery-verification.md): Delivery Verification availability for US shipments.
+- [Package Dimensions & Weight](https://help.ship.uniuni.com/en/shipments/usa/dim-weight.md): Enter the dimensions and weight of your US-bound package, or apply a saved preset.
+- [Duties & Clearance](https://help.ship.uniuni.com/en/shipments/usa/duties-and-clearance.md): Select a customs clearance type for your US-bound shipment. Required for all cross-border shipments to the United States.
+- [Parcel Protection](https://help.ship.uniuni.com/en/shipments/usa/parcel-protection.md): Protect your US shipment against loss or damage in transit.
+- [Postage](https://help.ship.uniuni.com/en/shipments/usa/postage.md): Select a service level for your US-bound shipment and review the calculated shipping rate.
+- [Shipment Contents](https://help.ship.uniuni.com/en/shipments/usa/shipment-contents.md): Declare the items in your US-bound shipment, including HTS codes and manufacturer details required for customs.
+- [Shipment Destination](https://help.ship.uniuni.com/en/shipments/usa/shipment-destination.md): Enter the delivery address for your US-bound shipment.
+- [Refresh Your Shopify Connection](https://help.ship.uniuni.com/en/troubleshooting/integrations/shopify/refresh-connection.md): Refresh your Shopify connection when new orders stop importing into UniUni Platform
+- [Adding Credits](https://help.ship.uniuni.com/en/wallet/adding-credits.md): Top up your wallet balance to purchase labels and manage shipments on the UniUni Platform.
+- [Automatic Top-Up](https://help.ship.uniuni.com/en/wallet/automatic-topup.md): Keep your wallet funded automatically so you never run out of credits during shipping operations.
+- [Payment Methods](https://help.ship.uniuni.com/en/wallet/payment-method.md): Add and manage credit cards on your UniUni Platform account for wallet top-ups.
+- [Transactions](https://help.ship.uniuni.com/en/wallet/transactions.md): View and export your wallet transaction history on the UniUni Platform.
+- [Webhook Configuration](https://help.ship.uniuni.com/en/webhooks/webhooks.md): Receive real-time shipment and insurance status updates
+
+## OpenAPI Specs
+
+- [openapi](https://help.ship.uniuni.com/api-reference/openapi.json)
+
+## Optional
+
+- [UniUni News](https://www.uniuni.com/news/)
+- [Blogs](https://www.uniuni.com/news/)
+- [Nouvelles UniUni](https://www.uniuni.com/news/)
+- [Blogues](https://www.uniuni.com/news/)
+- [UniUni 新闻](https://www.uniuni.com/news/)
+- [博客](https://www.uniuni.com/news/)
+- [Noticias UniUni](https://www.uniuni.com/news/)
+- [Blog](https://www.uniuni.com/news/)

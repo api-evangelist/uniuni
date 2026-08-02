@@ -1,0 +1,58 @@
+generated: '2026-07-21'
+method: searched
+source: https://help.ship.uniuni.com/en/webhooks/webhooks
+spec_type: Webhooks
+name: UniUni Platform webhooks
+summary: >-
+  UniUni sends webhook notifications when shipment or insurance statuses change. Endpoints are
+  configured in the UniUni Platform Portal (Settings → Integrations → REST API → Webhook
+  Configuration) and can be exercised via the Test Webhook API endpoint. Payloads are JSON with
+  an event name, schema version, and a typed data object.
+configuration:
+  portal: https://ship.uniuni.com
+  test_endpoint: POST /webhook/test (Client API)
+  url_requirement: HTTPS only
+  secret: Generated in the portal; shown once. Rotate by deleting and recreating the config.
+security:
+  modes:
+    - mode: HMAC
+      recommended: true
+      algorithm: HMAC-SHA256 over the raw JSON request body
+      header: configurable (e.g. X-Webhook-Signature)
+      verification: recompute with secret and compare timing-safe
+    - mode: TOKEN
+      header: configurable (e.g. Authorization), value sent as Bearer token
+    - mode: NONE
+      notes: Internal testing only; not recommended for production.
+events:
+  - name: shipment.status_updated
+    description: Shipment status has changed
+    payload:
+      version: string schema version (currently "1")
+      data.objectType: Shipment
+      data.trackingId: shipment tracking ID
+      data.status: new shipment status (see shipment status reference)
+      data.statusCode: numeric status code
+      data.updatedAt: ISO 8601 timestamp
+      data.address: optional location details
+      data.transferCarrierName: last-mile carrier name when handed off
+      data.transferCarrierTrackingId: last-mile carrier tracking ID
+      data.proofOfDelivery: present only when status is DELIVERED (recipient, deliveryDate, deliveryTime, trackingNumber, pods[])
+  - name: shipment.custom_event
+    description: Custom shipment event
+  - name: insurance.status_updated
+    description: Insurance policy purchased, updated, or claim status changed
+    statuses: [PENDING, PURCHASED, REJECTED, CANCELLED, CLAIM_SUBMITTED, CLAIM_IN_REVIEW,
+      CLAIM_APPROVED, CLAIM_APPROVED_PARTIAL, CLAIM_REJECTED, CLAIM_CANCELLED, CLAIM_ACTION_NEEDED]
+    payload:
+      data.objectType: Insurance
+      data.id: insurance record ID (number)
+      data.shipmentOrderNumber: order number of the associated shipment
+      data.status: new insurance status
+      data.updatedAt: ISO 8601 timestamp
+legacy_integration_api:
+  docs: https://docs.uniuni.com/
+  notes: >-
+    The legacy Integration API also documents a Push Tracking Event webhook (with optional
+    HMAC signing) that pushes tracking scan events to a merchant-provided endpoint.
+status_reference: https://help.ship.uniuni.com/en/api/shipment-status-reference

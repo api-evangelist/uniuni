@@ -1,0 +1,67 @@
+generated: '2026-07-21'
+method: searched
+source: https://help.ship.uniuni.com/en/api/introduction
+docs:
+  - https://help.ship.uniuni.com/en/api/introduction
+  - https://help.ship.uniuni.com/en/partner-api/error-handling
+  - https://help.ship.uniuni.com/en/partner-api/authentication
+format: custom-envelope
+notes: >-
+  UniUni does not use RFC 9457 problem+json. The Client API returns HTTP 200 with a
+  { message, code, data } envelope where code 0 is success and non-zero codes signal
+  business errors; malformed payloads return HTTP 422 with a Zod issues array
+  (errorCode: PayloadValidationError). The Partner API uses a
+  { success, message, errorCode } envelope with conventional HTTP statuses.
+problems:
+  - api: client
+    code: 0
+    title: Success
+  - api: client
+    code: 1002
+    title: Invalid request
+  - api: client
+    code: 1006
+    title: Database error
+  - api: client
+    code: 1009
+    title: General error
+    notes: Also returned for missing or invalid/revoked access tokens.
+  - api: client
+    code: 1014
+    title: Resource not found
+    notes: Labels and batches lookups.
+  - api: client
+    code: 1031
+    title: Tracking lookup failed
+  - api: client
+    status: 422
+    errorCode: PayloadValidationError
+    title: Unprocessable Content
+    notes: Required parameters missing or wrong type; meta.issues carries Zod validation issues.
+  - api: partner
+    status: 401
+    errorCode: MissingTokenError
+    title: No Authorization header provided
+  - api: partner
+    status: 401
+    errorCode: ExpiredTokenError
+    title: JWT access token has expired
+    remediation: Request a new token from GET /auth/token.
+  - api: partner
+    status: 401
+    errorCode: InvalidTokenError
+    title: Token malformed or API key invalid
+  - api: partner
+    status: 401
+    errorCode: TokenPayloadError
+    title: Token payload could not be decoded
+  - api: partner
+    status: 404
+    errorCode: ShipmentNotFoundError
+    title: Shipment not found
+  - api: partner
+    status: 400
+    title: Bad request — invalid or missing parameters
+  - api: partner
+    status: 500
+    title: Internal server error

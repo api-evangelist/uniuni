@@ -1,0 +1,60 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/uniuni-platform-client-api-openapi.yml
+notes: >-
+  No official UniUni-hosted MCP server was found (docs, npm, MCP registries searched
+  2026-07-21). Candidate tool list derived one-to-one from the UniUni Platform Client API
+  operations.
+server:
+  name: uniuni
+  transport: http
+tools:
+  - name: create_shipment
+    description: Create a new shipment in DRAFT status
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#createShipment
+  - name: get_pricing_quote
+    description: Get estimated shipping rates for a destination, dimensions, weight, and postage type
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#getPricingQuote
+  - name: purchase_shipment
+    description: Purchase a shipment, deducting the cost from the wallet balance
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#purchaseShipment
+  - name: refund_shipment
+    description: Request a refund for a purchased shipment
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#refundShipment
+  - name: retrieve_shipment
+    description: Retrieve a specific shipment by its order number
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#retrieveShipment
+  - name: list_shipments
+    description: List shipments with optional filters (paginated)
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#listShipments
+  - name: delete_shipment
+    description: Delete a DRAFT shipment
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#deleteShipment
+  - name: create_batch
+    description: Create a new batch, optionally with purchased shipments
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#createBatch
+  - name: list_batches
+    description: List batches (paginated)
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#listBatches
+  - name: retrieve_batch
+    description: Retrieve a batch including its shipment order numbers
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#retrieveBatch
+  - name: add_shipments_to_batch
+    description: Add purchased shipments to an existing batch
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#addShipmentsToBatch
+  - name: remove_shipments_from_batch
+    description: Remove shipments from a batch
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#removeShipmentsFromBatch
+  - name: delete_batch
+    description: Delete a received batch
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#deleteBatch
+  - name: get_label
+    description: Retrieve a shipping or batch label as a Base64-encoded PDF
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#getLabel
+  - name: track_shipment
+    description: Retrieve tracking status, recipient, and scan events for a tracking ID
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#trackShipment
+  - name: test_webhook
+    description: Send a test webhook payload to the configured endpoint
+    source_operation: openapi/uniuni-platform-client-api-openapi.yml#testWebhook

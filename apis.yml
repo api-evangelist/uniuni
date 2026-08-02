@@ -1,9 +1,26 @@
 aid: uniuni
 name: UniUni
-description: 'UniUni is a company surfaced as a portfolio company of bessemer-venture-partners, dcm-ventures
-  and added to the API Evangelist network as a stub for enrichment. Sector: vertical-software. This profile
-  is a lead awaiting the enrichment pipeline.'
+description: >-
+  UniUni is a Canadian last-mile delivery carrier serving ecommerce businesses across Canada and
+  the United States, delivering parcels through a crowdsourced driver network with hubs, stores,
+  and partner drop-off locations. The UniUni Platform gives merchants shipment creation, label
+  purchase, batching, wallet billing, tracking, and Shopify/ShipStation/WooCommerce
+  integrations, alongside a REST Client API, a Partner API for vendor tracking updates, and a
+  legacy Integration API for enterprise shippers.
 url: https://raw.githubusercontent.com/api-evangelist/uniuni/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://mintcdn.com/uniexpressinc/YvoYth8Wg7rezp7U/logo/light.svg
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -11,13 +28,110 @@ x-backed-by:
 - dcm-ventures
 x-tier: stub
 x-tier-reason: portfolio-lead
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-- Vertical Software
-apis: []
+- Logistics
+- Shipping
+- Last-Mile Delivery
+- Ecommerce
+- Tracking
+- Delivery
+apis:
+- name: UniUni Partner API
+  description: >-
+    JWT-authenticated API for partner vendors (drop-off locations, scan events) to exchange an API key
+    for a 24-hour access token and query shipment tracking status and event history.
+  humanURL: https://help.ship.uniuni.com/en/partner-api/must-read
+  baseURL: https://api.ship.uniuni.com/partner
+  tags:
+  - Tracking
+  - Partners
+  properties:
+  - type: Documentation
+    url: https://help.ship.uniuni.com/en/partner-api/authentication
+- name: UniUni Integration API
+  description: >-
+    Legacy enterprise integration API documented as a public Postman collection — token-based authorization,
+    freight estimation, sorting information, batch management, shipment creation/cancellation, label printing,
+    service availability validation, tracking queries, push-tracking webhooks with HMAC, and proof-of-delivery
+    retrieval.
+  humanURL: https://docs.uniuni.com/
+  baseURL: https://prm-api.uniuni.com
+  tags:
+  - Shipments
+  - Tracking
+  - Labels
+  properties:
+  - type: Documentation
+    url: https://docs.uniuni.com/
+- aid: uniuni:uniuni-batches-api
+  name: UniUni Batches API
+  description: Group purchased shipments into batches for drop-off or pickup.
+  humanURL: https://help.ship.uniuni.com/en/api/introduction
+  baseURL: https://api.ship.uniuni.com/prod/client/
+  tags:
+  - Batches
+  properties:
+  - type: OpenAPI
+    url: openapi/uniuni-batches-api-openapi.yml
+  - type: Documentation
+    url: https://help.ship.uniuni.com/en/api/introduction
+- aid: uniuni:uniuni-labels-api
+  name: UniUni Labels API
+  description: Retrieve shipping and batch labels as Base64-encoded PDFs.
+  humanURL: https://help.ship.uniuni.com/en/api/introduction
+  baseURL: https://api.ship.uniuni.com/prod/client/
+  tags:
+  - Labels
+  properties:
+  - type: OpenAPI
+    url: openapi/uniuni-labels-api-openapi.yml
+  - type: Documentation
+    url: https://help.ship.uniuni.com/en/api/introduction
+- aid: uniuni:uniuni-shipments-api
+  name: UniUni Shipments API
+  description: Create, retrieve, list, purchase, refund, and delete shipments.
+  humanURL: https://help.ship.uniuni.com/en/api/introduction
+  baseURL: https://api.ship.uniuni.com/prod/client/
+  tags:
+  - Shipments
+  properties:
+  - type: OpenAPI
+    url: openapi/uniuni-shipments-api-openapi.yml
+  - type: Documentation
+    url: https://help.ship.uniuni.com/en/api/introduction
+- aid: uniuni:uniuni-tracking-api
+  name: UniUni Tracking API
+  description: Track shipment status and scan events.
+  humanURL: https://help.ship.uniuni.com/en/api/introduction
+  baseURL: https://api.ship.uniuni.com/prod/client/
+  tags:
+  - Tracking
+  properties:
+  - type: OpenAPI
+    url: openapi/uniuni-tracking-api-openapi.yml
+  - type: Documentation
+    url: https://help.ship.uniuni.com/en/api/introduction
+- aid: uniuni:uniuni-webhooks-api
+  name: UniUni Webhooks API
+  description: Receive real-time shipment status updates.
+  humanURL: https://help.ship.uniuni.com/en/api/introduction
+  baseURL: https://api.ship.uniuni.com/prod/client/
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/uniuni-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://help.ship.uniuni.com/en/api/introduction
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -26,3 +140,47 @@ maintainers:
 common:
 - type: Website
   url: https://www.uniuni.com/
+- type: DeveloperPortal
+  url: https://ship.uniuni.com
+- type: Documentation
+  url: https://help.ship.uniuni.com/
+- type: APIReference
+  url: https://help.ship.uniuni.com/en/api/introduction
+- type: GettingStarted
+  url: https://help.ship.uniuni.com/en/getting-started/welcome
+- type: Support
+  url: https://www.uniuni.com/support/
+- type: Blog
+  url: https://www.uniuni.com/news/
+- type: SignUp
+  url: https://ship.uniuni.com/signup
+- type: TermsOfService
+  url: https://help.ship.uniuni.com/en/legal/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://www.uniuni.com/privacy-policy/
+- type: Postman
+  url: https://docs.uniuni.com/
+- type: LLMsTxt
+  url: llms/uniuni-llms.txt
+- type: MCPServer
+  url: mcp/uniuni-mcp.yml
+- type: Authentication
+  url: authentication/uniuni-authentication.yml
+- type: Sandbox
+  url: sandbox/uniuni-sandbox.yml
+- type: Conventions
+  url: conventions/uniuni-conventions.yml
+- type: ErrorCatalog
+  url: errors/uniuni-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/uniuni-lifecycle.yml
+- type: Conformance
+  url: conformance/uniuni-conformance.yml
+- type: DataModel
+  url: data-model/uniuni-data-model.yml
+- type: Webhooks
+  url: asyncapi/uniuni-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/uniuni-domain-security.yml

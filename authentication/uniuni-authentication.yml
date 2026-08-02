@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: searched
+source: https://help.ship.uniuni.com/en/api/create-access-token
+docs:
+  - https://help.ship.uniuni.com/en/api/create-access-token
+  - https://help.ship.uniuni.com/en/partner-api/authentication
+  - https://docs.uniuni.com/
+summary:
+  types: [http-bearer, apiKey]
+  api_key_in: [header]
+  oauth2_flows: []
+schemes:
+  - name: bearerAuth
+    type: http
+    scheme: bearer
+    api: UniUni Platform Client API
+    description: >-
+      API access token generated from the UniUni Platform dashboard (New shipment → Import from
+      integration → REST API). Up to 5 active tokens; deleting a token revokes access
+      immediately. Sent as Authorization: Bearer <ACCESS_TOKEN> on every request.
+    token_management:
+      max_active_tokens: 5
+      portal_production: https://ship.uniuni.com/integrations/rest-api
+      portal_sandbox: https://sandbox.unigo.ca/integrations/rest-api
+    sources: [openapi/uniuni-platform-client-api-openapi.yml]
+  - name: partnerApiKey
+    type: apiKey
+    in: header
+    parameter: X-API-Key
+    api: UniUni Partner API
+    description: >-
+      Partner vendors exchange an X-API-Key for a JWT access token via GET
+      https://api.ship.uniuni.com/partner/auth/token; the JWT (valid 24 hours) is then sent as
+      Authorization: Bearer <accessToken>. Keys are issued by a UniUni account representative.
+    token_ttl_seconds: 86400
+    error_codes: [MissingTokenError, ExpiredTokenError, InvalidTokenError, TokenPayloadError]
+  - name: integrationClientCredentials
+    type: apiKey
+    api: UniUni Integration API (legacy)
+    description: >-
+      The legacy Integration API (docs.uniuni.com) obtains a customer token via POST
+      /storeauth/customertoken?grant_type=client_crendetials using a UniUni-issued Client ID and
+      Client Secret, then sends the token on subsequent requests. Base hosts:
+      https://prm-api.uniuni.com (production), https://prm-api.qa.uniuni.com (QA).

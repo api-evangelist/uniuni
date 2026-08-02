@@ -1,0 +1,15 @@
+generated: '2026-07-21'
+method: generated
+skills:
+  - file: uniuni-quote-create-purchase-label.md
+    name: Quote, create, purchase, and label a UniUni shipment
+    api: openapi/uniuni-platform-client-api-openapi.yml
+    operations: [getPricingQuote, createShipment, purchaseShipment, retrieveShipment, getLabel]
+  - file: uniuni-batch-shipments.md
+    name: Batch UniUni shipments for drop-off or pickup
+    api: openapi/uniuni-platform-client-api-openapi.yml
+    operations: [createBatch, addShipmentsToBatch, removeShipmentsFromBatch, retrieveBatch, listBatches, getLabel, deleteBatch]
+  - file: uniuni-track-and-notify.md
+    name: Track UniUni shipments and receive webhook updates
+    api: openapi/uniuni-platform-client-api-openapi.yml
+    operations: [trackShipment, testWebhook]

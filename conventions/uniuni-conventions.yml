@@ -1,0 +1,58 @@
+generated: '2026-07-21'
+method: searched
+source: https://help.ship.uniuni.com/en/api/introduction
+docs:
+  - https://help.ship.uniuni.com/en/api/introduction
+  - https://help.ship.uniuni.com/en/partner-api/error-handling
+name: UniUni Platform API conventions
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <ACCESS_TOKEN>'
+  notes: >-
+    Client API uses dashboard-generated access tokens (max 5 active). The separate Partner API
+    exchanges an X-API-Key for a 24-hour JWT. See authentication/uniuni-authentication.yml.
+transport:
+  https_only: true
+  content_type: application/json; charset=utf-8
+  key_casing: camelCase
+response_envelope:
+  shape:
+    message: string — additional information about the request status
+    code: integer — status code, 0 indicates success
+    data: object|null — response payload, null when code is not 0
+  http_status_behavior: >-
+    Client API returns HTTP 200 with a valid payload even for business-level errors (the code
+    field carries the error); invalid payloads return HTTP 422 with a Zod validation issues array.
+  partner_api_envelope:
+    shape: '{ success: boolean, message: string, data?: object, errorCode?: string }'
+    http_statuses: [200, 400, 401, 404, 500]
+pagination:
+  style: page-offset
+  params:
+    page: default 1
+    pageSize: default 10, max 500
+  applies_to: collection endpoints (list shipments, list batches)
+idempotency:
+  supported: false
+  notes: No idempotency-key mechanism is documented for the Client, Partner, or Integration APIs.
+field_expansion:
+  supported: false
+request_tracing:
+  documented: false
+versioning:
+  scheme: none-documented
+  notes: >-
+    Client API spec is versioned 1.0.0; no URI/header versioning contract is documented. The
+    legacy Integration API mixes /version2/ path prefixes on some endpoints.
+error_envelope:
+  see: errors/uniuni-problem-types.yml
+rate_limits:
+  documented: false
+webhooks:
+  see: asyncapi/uniuni-webhooks.yml
+  signing: HMAC-SHA256 over raw JSON body (recommended), bearer token, or none
+cross_links:
+  errors: errors/uniuni-problem-types.yml
+  authentication: authentication/uniuni-authentication.yml
+  lifecycle: lifecycle/uniuni-lifecycle.yml
+  sandbox: sandbox/uniuni-sandbox.yml

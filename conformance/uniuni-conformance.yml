@@ -1,0 +1,40 @@
+generated: '2026-07-21'
+method: derived
+source: help.ship.uniuni.com docs + docs.uniuni.com Postman collection
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: >-
+      Client API uses dashboard-generated bearer access tokens; Partner API exchanges an
+      X-API-Key for a JWT. The legacy Integration API token endpoint mimics a
+      client_credentials grant (grant_type=client_crendetials) but no standard OAuth2
+      authorization server is published.
+  - id: oidc
+    conforms: false
+    evidence: No /.well-known/openid-configuration on any UniUni host (probed 2026-07-21, 403/404).
+  - id: http-bearer-auth
+    conforms: true
+    evidence: openapi securitySchemes type http scheme bearer; Authorization Bearer documented.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Custom { message, code, data } envelope with HTTP 200 for business errors; no
+      application/problem+json.
+  - id: pagination
+    conforms: true
+    evidence: page/pageSize query parameters on collection endpoints (default 10, max 500).
+  - id: idempotency
+    conforms: false
+    evidence: No idempotency-key mechanism documented.
+  - id: webhooks-hmac-signing
+    conforms: true
+    evidence: HMAC-SHA256 signature over raw JSON body, configurable header, documented verification.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returns 403/404 on all probed hosts (2026-07-21).
+  - id: json-api
+    conforms: false
+    evidence: Plain JSON envelope, not JSON:API media type.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset/Deprecation header support documented.

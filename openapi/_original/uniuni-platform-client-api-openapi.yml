@@ -1,0 +1,1801 @@
+openapi: 3.1.0
+info:
+  title: UniUni Platform Client API
+  description: API for creating shipments, purchasing labels, managing batches, tracking deliveries, and
+    receiving webhook notifications.
+  version: 1.0.0
+  contact:
+    name: UniUni Retail Support
+    email: retailsupport@uniuni.com
+servers:
+- url: https://api.ship.uniuni.com/prod
+  description: Production
+- url: https://api-sandbox.ship.uniuni.com
+  description: Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Shipments
+  description: Create, retrieve, list, purchase, refund, and delete shipments.
+- name: Batches
+  description: Group purchased shipments into batches for drop-off or pickup.
+- name: Labels
+  description: Retrieve shipping and batch labels as Base64-encoded PDFs.
+- name: Tracking
+  description: Track shipment status and scan events.
+- name: Webhooks
+  description: Receive real-time shipment status updates.
+paths:
+  /client/batch/{batchNumber}/addShipment:
+    post:
+      tags:
+      - Batches
+      summary: Add shipments to a batch
+      description: Adds one or more purchased shipments to an existing batch. Each shipment can only belong
+        to one batch — adding a shipment already in another batch moves it.
+      operationId: addShipmentsToBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchShipmentsRequest'
+              example:
+                shipments:
+                - UNI02947917E
+                - UNI0114576F0
+            example:
+              shipments:
+              - UNI02947917E
+              - UNI0114576F0
+      responses:
+        '200':
+          description: Shipments added or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/BatchMutationResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipments added
+                  value:
+                    message: Shipments added to batch successfully
+                    code: 0
+                    data:
+                      batchNumber: URB0714000000000727
+                      batchName: test
+                      status: PENDING
+                      printedLabel: false
+                      shipmentCount: 2
+                notFound:
+                  summary: Shipments not found
+                  value:
+                    message: 'Shipments with following order numbers not found: UNI02947917E, UNI0114576F0'
+                    code: 1002
+                    data: null
+  /client/batch/create:
+    post:
+      tags:
+      - Batches
+      summary: Create a batch
+      description: Creates a new batch. You can optionally include purchased shipments at creation time,
+        or create an empty batch and add shipments later.
+      operationId: createBatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBatchRequest'
+              example:
+                batchName: test-111
+                shipments:
+                - UNI02947917E
+            example:
+              batchName: Monday Dropoff
+              shipments:
+              - UNI02947917E
+      responses:
+        '200':
+          description: Batch created or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/Batch'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Batch created
+                  value:
+                    message: Success
+                    code: 0
+                    data:
+                      batchNumber: URB0717000000000837
+                      batchName: Monday Dropoff
+                      status: PENDING
+                      printedLabel: false
+                      createdAt: '2025-07-17T21:55:05.526Z'
+                      updatedAt: '2025-07-17T21:55:05.697Z'
+                      shipmentCount: 1
+                unpaidShipments:
+                  summary: Unpaid shipments
+                  value:
+                    message: Unpaid shipments are found
+                    code: 1002
+                    data: null
+  /client/batch/{batchNumber}/delete:
+    post:
+      tags:
+      - Batches
+      summary: Delete a batch
+      description: Deletes a batch. Only batches that have been received can be deleted.
+      operationId: deleteBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      responses:
+        '200':
+          description: Batch deleted or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    type: object
+                    nullable: true
+                    description: Always null for this operation.
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Batch deleted
+                  value:
+                    message: Batch deleted successfully
+                    code: 0
+                    data: null
+                notFound:
+                  summary: Batch not found
+                  value:
+                    message: Batch not found
+                    code: 1009
+                    data: null
+  /client/batch:
+    get:
+      tags:
+      - Batches
+      summary: List all batches
+      description: Retrieves a paginated list of batches.
+      operationId: listBatches
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: isNotInPickup
+        in: query
+        description: If true, only returns batches that are not in pickup status.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Paginated list of batches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/ListBatchesResponseData'
+                required:
+                - message
+                - code
+              example:
+                message: Success
+                code: 0
+                data:
+                  batches:
+                  - batchNumber: URB0805000000000947
+                    batchName: final-test
+                    status: PENDING
+                    printedLabel: true
+                    createdAt: '2025-08-05T17:31:27.157Z'
+                    updatedAt: '2025-08-05T17:34:32.262Z'
+                    shipmentCount: 1
+                  pagination:
+                    page: 1
+                    pageSize: 10
+                    count: 25
+  /client/batch/{batchNumber}/removeShipment:
+    post:
+      tags:
+      - Batches
+      summary: Remove shipments from a batch
+      description: Removes one or more shipments from a batch.
+      operationId: removeShipmentsFromBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchShipmentsRequest'
+              example:
+                shipments:
+                - UNI033642B16
+            example:
+              shipments:
+              - UNI033642B16
+      responses:
+        '200':
+          description: Shipments removed or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/BatchMutationResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipments removed
+                  value:
+                    message: Shipments removed from batch successfully
+                    code: 0
+                    data:
+                      batchNumber: URB0717000000000837
+                      batchName: test-17
+                      status: PENDING
+                      printedLabel: false
+                      shipmentCount: 0
+                      shipments: []
+                notInBatch:
+                  summary: Shipments not in batch
+                  value:
+                    message: Shipments are not found in this batch
+                    code: 1009
+                    data: null
+  /client/batch/{batchNumber}:
+    get:
+      tags:
+      - Batches
+      summary: Retrieve a batch
+      description: Retrieves detailed information about a specific batch, including its list of shipment
+        order numbers.
+      operationId: retrieveBatch
+      parameters:
+      - $ref: '#/components/parameters/BatchNumber'
+      responses:
+        '200':
+          description: Batch details or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/BatchResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Batch retrieved
+                  value:
+                    message: Success
+                    code: 0
+                    data:
+                      batchNumber: URB0714000000000687
+                      batchName: Test batch 1 7-14-2025
+                      status: RECEIVED
+                      printedLabel: false
+                      createdAt: '2025-07-14T17:59:27.645Z'
+                      updatedAt: '2025-07-14T18:53:57.669Z'
+                      shipmentCount: 1
+                      shipments:
+                      - UNI07787536D
+                notFound:
+                  summary: Batch not found
+                  value:
+                    message: Batch not found
+                    code: 1009
+                    data: null
+  /client/label/{id}:
+    get:
+      tags:
+      - Labels
+      summary: Get label
+      description: Retrieves a shipping or batching label as a Base64-encoded PDF.
+      operationId: getLabel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The orderNumber (for shipping labels) or batchNumber (for batch labels).
+        schema:
+          type: string
+      - name: labelType
+        in: query
+        required: true
+        description: Type of label to retrieve.
+        schema:
+          type: string
+          enum:
+          - shipping
+          - batching
+      responses:
+        '200':
+          description: Label PDF or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/LabelResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Label retrieved
+                  value:
+                    message: Success
+                    code: 0
+                    data:
+                      headers:
+                        Content-Type: application/pdf
+                        Content-Disposition: attachment; filename="UR07240000000004901_shipping_labels_2025-07-31.pdf"
+                      body: JVBERi0xLjMKJf////8K...
+                notFound:
+                  summary: Not found
+                  value:
+                    message: No batch found for the given batch number
+                    code: 1014
+                    data: null
+  /client/shipments/create:
+    post:
+      tags:
+      - Shipments
+      summary: Create a shipment
+      description: Creates a new shipment in DRAFT status. The shipment must be purchased separately before
+        a label can be generated.
+      operationId: createShipment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentRequest'
+              example:
+                recipient:
+                  name: Jane Doe
+                  phone: +1-604-123-4567
+                  email: jane@example.com
+                  signature: false
+                address:
+                  address1: 3460 Cawthra Road
+                  address2: ''
+                  city: Mississauga
+                  province: 'ON'
+                  postalCode: L5A 2Y1
+                  country: CA
+                dimensions:
+                  length: 1
+                  width: 1
+                  height: 1
+                  dimensionUnit: INCH
+                weight:
+                  value: 1
+                  weightUnit: LB
+                postageType: STANDARD
+                note: Gift Box
+                shipmentLineItems:
+                - description: test
+                  quantity: 1
+                  unit_value: 10
+                  currency: CAD
+            example:
+              recipient:
+                name: Jane Doe
+                phone: +1-604-123-4567
+                email: jane@example.com
+                signature: false
+              address:
+                address1: 3460 Cawthra Road
+                city: Mississauga
+                province: 'ON'
+                postalCode: L5A 2Y1
+                country: CA
+              dimensions:
+                length: 1
+                width: 1
+                height: 1
+                dimensionUnit: INCH
+              weight:
+                value: 1
+                weightUnit: LB
+              postageType: STANDARD
+              note: Gift Box
+              shipmentLineItems:
+              - description: T-shirt
+                quantity: 1
+                unit_value: 10
+                currency: CAD
+      responses:
+        '200':
+          description: Shipment created or error returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/ShipmentResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipment created successfully
+                  value:
+                    message: Shipment created successfully
+                    code: 0
+                    data:
+                      orderNumber: UNI031455E90
+                      trackingId: UR07300000000005351
+                      recipient:
+                        name: Jane Doe
+                        phone: +1-604-123-4567
+                        email: jane@example.com
+                      address:
+                        address1: 2455 Meadowvale Blvd
+                        city: Mississauga
+                        province: 'ON'
+                        postalCode: L5N 0H1
+                        country: CA
+                      dimensions:
+                        length: 1
+                        width: 1
+                        height: 1
+                        dimensionUnit: INCH
+                      weight:
+                        value: 1
+                        weightUnit: LB
+                      status: DRAFT
+                      note: Gift Box
+                      createdAt: '2025-07-30T18:32:11.455Z'
+                      updatedAt: '2025-07-30T18:32:11.899Z'
+                      rates:
+                        postageType: NEXT DAY
+                        postageFee: 4.88
+                        tax: 0.63
+                        total: 5.51
+                        currency: CAD
+                      shipmentLineItems:
+                      - description: T-shirt
+                        quantity: 1
+                        unit_value: 10
+                        currency: CAD
+                notInServiceArea:
+                  summary: Not in service area
+                  value:
+                    message: 'No service rate for the origin location: Hamilton, ON, Canada'
+                    code: 1009
+                    data: null
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /client/shipments/{orderNumber}/delete:
+    post:
+      tags:
+      - Shipments
+      summary: Delete a Shipment
+      description: Deletes a shipment. Only shipments in DRAFT status can be deleted.
+      operationId: deleteShipment
+      parameters:
+      - $ref: '#/components/parameters/OrderNumber'
+      responses:
+        '200':
+          description: Delete result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    type: object
+                    nullable: true
+                    description: Always null for this operation.
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipment deleted successfully
+                  value:
+                    message: Shipment deleted successfully
+                    code: 0
+                    data: null
+                notFound:
+                  summary: Shipment not found
+                  value:
+                    message: Shipment not found
+                    code: 1009
+                    data: null
+  /client/shipments:
+    get:
+      tags:
+      - Shipments
+      summary: List all shipments
+      description: Retrieves a paginated list of shipments with optional filters.
+      operationId: listShipments
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PageSize'
+      - name: status
+        in: query
+        description: Filter by shipment status.
+        schema:
+          $ref: '#/components/schemas/ShipmentStatus'
+      - name: fromDate
+        in: query
+        description: Filter shipments created on or after this date (YYYY-MM-DD).
+        schema:
+          type: string
+          format: date
+      - name: toDate
+        in: query
+        description: Filter shipments created on or before this date (YYYY-MM-DD).
+        schema:
+          type: string
+          format: date
+      - name: query
+        in: query
+        description: Search keyword. Matches against order number, tracking ID, recipient name, phone,
+          or email.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Paginated list of shipments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/ListShipmentsResponseData'
+                required:
+                - message
+                - code
+              example:
+                message: Shipments listed successfully
+                code: 0
+                data:
+                  shipments:
+                  - orderNumber: UNI029834CA7
+                    trackingId: UR07240000000004901
+                    recipient:
+                      name: Jane Doe
+                      phone: +1-604-123-4567
+                      email: jane@example.com
+                    address:
+                      address1: 2455 Meadowvale Blvd
+                      city: Mississauga
+                      province: 'ON'
+                      postalCode: L5N 0H1
+                      country: CA
+                    dimensions:
+                      length: 1
+                      width: 1
+                      height: 1
+                      dimensionUnit: INCH
+                    weight:
+                      value: 1
+                      weightUnit: LB
+                    status: PENDING
+                    note: Gift Box
+                    createdAt: '2025-07-24T23:32:09.834Z'
+                    updatedAt: '2025-07-25T00:41:53.815Z'
+                    rates:
+                      postageType: NEXT DAY
+                      postageFee: 4.88
+                      tax: 0.63
+                      total: 5.51
+                      currency: CAD
+                    shipmentLineItems:
+                    - description: T-shirt
+                      quantity: 1
+                      unit_value: 10
+                      currency: CAD
+                  pagination:
+                    page: 1
+                    pageSize: 10
+                    count: 63
+  /client/shipments/quote:
+    post:
+      tags:
+      - Shipments
+      summary: Get a pricing quote
+      description: Returns estimated shipping rates for a given destination address, package dimensions,
+        weight, and postage type. Does not create a shipment, reserve a rate, charge the merchant, or
+        guarantee final service availability.
+      operationId: getPricingQuote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingQuoteRequest'
+      responses:
+        '200':
+          description: Estimated rates retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/PricingQuoteResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Estimated rates retrieved successfully
+                  value:
+                    message: Estimated rates retrieved successfully
+                    code: 0
+                    data:
+                      rates:
+                      - postageType: NEXT DAY
+                        carrierName: UniUni
+                        postageFee: 1.3
+                        tax: 0
+                        total: 1.3
+                        currency: CAD
+                        estimated: true
+                        minDeliveryDays: 1
+                        maxDeliveryDays: 2
+                      carrierName: UniUni
+                      estimated: true
+                      disclaimer: Rates are estimates only and do not guarantee final shipment eligibility,
+                        service availability, or delivery.
+                noRates:
+                  summary: No rates available
+                  value:
+                    message: Estimated rates retrieved successfully
+                    code: 0
+                    data:
+                      rates: []
+                      carrierName: UniUni
+                      estimated: true
+                      disclaimer: Rates are estimates only and do not guarantee final shipment eligibility,
+                        service availability, or delivery.
+                failure:
+                  summary: Invalid input
+                  value:
+                    message: country CountryDoesNotExist not valid
+                    code: 1009
+                    data: null
+  /client/shipments/{orderNumber}/purchase:
+    post:
+      tags:
+      - Shipments
+      summary: Purchase a shipment
+      description: Purchases a shipment and deducts the cost from your wallet balance. The shipment status
+        changes from DRAFT to PENDING.
+      operationId: purchaseShipment
+      parameters:
+      - $ref: '#/components/parameters/OrderNumber'
+      responses:
+        '200':
+          description: Purchase result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/PurchaseShipmentResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipment purchased successfully
+                  value:
+                    message: Shipment purchased successfully
+                    code: 0
+                    data:
+                      trackingId: UR07240000000004901
+                      orderNumber: UNI029834CA7
+                      insuranceCreated: false
+                paymentFailed:
+                  summary: Payment failed
+                  value:
+                    message: Payment failed for shipment
+                    code: 1009
+                    data: null
+  /client/shipments/{orderNumber}/refund:
+    post:
+      tags:
+      - Shipments
+      summary: Refund a shipment
+      description: Requests a refund for a purchased shipment.
+      operationId: refundShipment
+      parameters:
+      - $ref: '#/components/parameters/OrderNumber'
+      responses:
+        '200':
+          description: Refund result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    type: object
+                    nullable: true
+                    description: Always null for this operation.
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipment refunded successfully
+                  value:
+                    message: Shipment refunded successfully
+                    code: 0
+                    data: null
+                notEligible:
+                  summary: Not eligible for refund
+                  value:
+                    message: UR07230000000013221 cannot be refunded. Please contact support.
+                    code: 400
+                    data: null
+  /client/shipments/{orderNumber}:
+    get:
+      tags:
+      - Shipments
+      summary: Retrieve a shipment
+      description: Retrieves a specific shipment by its order number.
+      operationId: retrieveShipment
+      parameters:
+      - $ref: '#/components/parameters/OrderNumber'
+      responses:
+        '200':
+          description: Shipment retrieved or error returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/RetrieveShipmentResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Shipment retrieved successfully
+                  value:
+                    message: Shipment retrieved successfully
+                    code: 0
+                    data:
+                      shipment:
+                        orderNumber: UNI0199855FF
+                        trackingId: UR05310000000001281
+                        recipient:
+                          name: Jane Doe
+                          email: jane@example.com
+                        address:
+                          address1: 88 Harbour St
+                          city: Toronto
+                          province: 'ON'
+                          postalCode: M7A 2S1
+                          country: Canada
+                        dimensions:
+                          length: 1
+                          width: 1
+                          height: 1
+                          dimensionUnit: INCH
+                        weight:
+                          value: 2
+                          weightUnit: LB
+                        status: PENDING
+                        note: ''
+                        createdAt: '2025-05-31T20:48:39.986Z'
+                        updatedAt: '2025-07-25T17:29:30.772Z'
+                        rates:
+                          postageType: NEXT DAY
+                          postageFee: 4.93
+                          tax: 0.64
+                          total: 5.57
+                          currency: CAD
+                        shipmentLineItems: []
+                notFound:
+                  summary: Shipment not found
+                  value:
+                    message: Shipment not found
+                    code: 1009
+                    data: null
+  /client/tracking:
+    get:
+      tags:
+      - Tracking
+      summary: TrackShipmentbyTrackingId
+      description: Retrieves tracking information for a shipment by its tracking ID, including status,
+        recipient, address, dimensions, and scan events.
+      operationId: trackShipment
+      parameters:
+      - name: trackingId
+        in: query
+        required: true
+        description: The shipment tracking ID. Must be 19 characters starting with `UR` (e.g. `UR06250000000000351`)
+          or 19 characters starting with `URB` (batch tracking ID).
+        schema:
+          type: string
+          pattern: ^(UR\d{17}|URB\d{16})$
+        example: UR06250000000000351
+      responses:
+        '200':
+          description: Tracking info or error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Additional information about the request status.
+                  code:
+                    type: integer
+                    description: Status code. 0 indicates success.
+                  data:
+                    $ref: '#/components/schemas/TrackingResponseData'
+                required:
+                - message
+                - code
+              examples:
+                success:
+                  summary: Tracking retrieved
+                  value:
+                    message: Tracking shipment successfully
+                    code: 0
+                    data:
+                      trackingId: UR06250000000000351
+                      status: RECEIVED
+                      orderNumber: UNI05893840E
+                      recipient:
+                        fullName: Jane Doe
+                        email: jane@example.com
+                      destination:
+                        address1: 5 Chagall Dr
+                        city: Vaughan
+                        province: 'ON'
+                        postalCode: L4J 9B2
+                        country: Canada
+                      signatureRequired: false
+                      weight:
+                        value: 1
+                        weightUnit: LB
+                      dimensions:
+                        length: 1
+                        width: 1
+                        height: 1
+                        dimensionUnit: INCH
+                      events:
+                      - statusCode: RECEIVED
+                        timestamp: 1750878222724
+                        location:
+                          name: 423 Four Valley Dr
+                          lat: 43.8361
+                          lng: -79.5686
+                notFound:
+                  summary: Shipment not found
+                  value:
+                    message: 'Track failed: Shipment not found: URB0715000000000757'
+                    code: 1031
+                    data: null
+  /webhook/test:
+    post:
+      tags:
+      - Webhooks
+      summary: Test Webhook
+      description: Sends a test webhook payload to your configured webhook endpoint to verify your integration.
+      operationId: testWebhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookPayload'
+              example:
+                event: shipment.status_updated
+                data:
+                  address:
+                    address1: 123 Main St
+                    address2: Suite 100
+                    city: Vancouver
+                    province: BC
+                    postalCode: V6B 1A1
+                    country: CA
+                  status: DELIVERED
+                  statusCode: 203
+                  trackingId: UR11170000000000001
+                  updatedAt: '2025-11-28T00:05:25.917Z'
+                  proofOfDelivery:
+                    trackingNumber: UR11170000000023641
+                    recipient: John Doe
+                    deliveryDate: '2025-11-28'
+                    deliveryTime: 00:05:25
+                    pods:
+                    - https://delivery-service-api.uniuni.ca/images/abcd001
+                    - https://delivery-service-api.uniuni.ca/images/abcd002
+            example:
+              event: shipment.status_updated
+              data:
+                address:
+                  address1: 123 Main St
+                  address2: Suite 100
+                  city: Vancouver
+                  province: BC
+                  postalCode: V6B 1A1
+                  country: CA
+                status: DELIVERED
+                statusCode: 203
+                trackingId: UR11170000000023641
+                updatedAt: '2025-11-28T00:05:25.917Z'
+                proofOfDelivery:
+                  recipient: John Doe
+                  deliveryDate: '2025-11-28'
+                  deliveryTime: 00:05:25
+                  pods:
+                  - https://delivery-service-api.uniuni.ca/images/abcd001
+                  - https://delivery-service-api.uniuni.ca/images/abcd002
+      responses:
+        '200':
+          description: Webhook test result
+      security: []
+components:
+  schemas:
+    BatchShipmentsRequest:
+      type: object
+      properties:
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of order numbers.
+      required:
+      - shipments
+    BatchMutationResponseData:
+      type: object
+      description: Partial batch summary returned after add/remove shipment operations.
+      properties:
+        batchNumber:
+          type: string
+        batchName:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+        shipmentCount:
+          type: integer
+      required:
+      - batchNumber
+      - status
+      - printedLabel
+      - shipmentCount
+    CreateBatchRequest:
+      type: object
+      properties:
+        batchName:
+          type: string
+          description: Name for the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of order numbers to include. Only purchased shipments can be added.
+    Batch:
+      type: object
+      properties:
+        batchNumber:
+          type: string
+          description: Unique batch identifier.
+        batchName:
+          type: string
+          description: Batch name.
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+          description: Whether the batch label has been printed.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        shipmentCount:
+          type: integer
+          description: Number of shipments in the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of shipment order numbers.
+    ListBatchesResponseData:
+      type: object
+      properties:
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Batch'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - batches
+      - pagination
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        count:
+          type: integer
+          description: Total number of records.
+    BatchResponseData:
+      type: object
+      properties:
+        batchNumber:
+          type: string
+          description: Unique batch identifier.
+        batchName:
+          type: string
+          description: Batch name.
+          nullable: true
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+          description: Whether the batch label has been printed.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        shipmentCount:
+          type: integer
+          description: Number of shipments in the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of shipment order numbers.
+      required:
+      - batchNumber
+      - status
+      - printedLabel
+      - shipmentCount
+    LabelResponseData:
+      type: object
+      properties:
+        headers:
+          type: object
+          properties:
+            Content-Type:
+              type: string
+              example: application/pdf
+            Content-Disposition:
+              type: string
+              example: attachment; filename="label.pdf"
+          required:
+          - Content-Type
+          - Content-Disposition
+        body:
+          type: string
+          description: Base64-encoded PDF content.
+      required:
+      - headers
+      - body
+    CreateShipmentRequest:
+      type: object
+      properties:
+        recipient:
+          $ref: '#/components/schemas/Recipient'
+          description: Recipient details. Provide phone, email, or both.
+        address:
+          $ref: '#/components/schemas/Address'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+          description: Package dimensions. Provide either dimensions or packagingId, not both. If neither
+            is provided, a saved default packaging preset will be used. If there are no saved packaging
+            presets, dimensions are required.
+        packagingId:
+          type: integer
+          description: ID of a pre-configured packaging profile. Use instead of dimensions if the package
+            matches a saved profile.
+        weight:
+          $ref: '#/components/schemas/Weight'
+        postageType:
+          $ref: '#/components/schemas/PostageType'
+        note:
+          type: string
+          maxLength: 200
+          description: Optional note, up to 200 characters.
+        insuranceRequired:
+          type: boolean
+          description: Whether parcel protection (insurance) is required for this shipment.
+        shipmentLineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItem'
+          minItems: 1
+          description: Line items describing the contents. Must contain at least one item.
+        orderNumber:
+          type: string
+          description: Optional client-provided order reference.
+      required:
+      - recipient
+      - address
+      - weight
+      - shipmentLineItems
+      - postageType
+    ShipmentResponseData:
+      type: object
+      properties:
+        orderNumber:
+          type: string
+          description: Unique order number.
+        trackingId:
+          type: string
+          description: Shipment tracking ID.
+        recipient:
+          $ref: '#/components/schemas/Recipient'
+        address:
+          $ref: '#/components/schemas/Address'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        weight:
+          $ref: '#/components/schemas/Weight'
+        status:
+          $ref: '#/components/schemas/ShipmentStatus'
+        note:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        rates:
+          $ref: '#/components/schemas/BillingSummary'
+        shipmentLineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItem'
+        insuranceRequired:
+          type: boolean
+      required:
+      - orderNumber
+      - trackingId
+      - status
+      - createdAt
+    Recipient:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Recipient name.
+        phone:
+          type: string
+          description: Recipient phone number.
+        email:
+          type: string
+          format: email
+          description: Recipient email.
+        signature:
+          type: boolean
+          default: false
+          description: Whether signature is required on delivery.
+      required:
+      - name
+    Address:
+      type: object
+      properties:
+        address1:
+          type: string
+          description: Address line 1.
+        address2:
+          type: string
+          description: Address line 2.
+        address3:
+          type: string
+          description: Address line 3.
+        city:
+          type: string
+          description: City.
+        province:
+          type: string
+          description: Province or state code.
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+        country:
+          type: string
+          description: Country code (e.g. CA, US).
+        latitude:
+          type: number
+          description: Latitude.
+        longitude:
+          type: number
+          description: Longitude.
+      required:
+      - address1
+      - city
+      - province
+      - postalCode
+      - country
+    Dimensions:
+      type: object
+      properties:
+        length:
+          type: number
+          description: Length.
+        width:
+          type: number
+          description: Width.
+        height:
+          type: number
+          description: Height.
+        dimensionUnit:
+          type: string
+          enum:
+          - CM
+          - INCH
+          - M
+          - FT
+          description: Unit of dimension.
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          description: Weight value.
+        weightUnit:
+          type: string
+          enum:
+          - G
+          - KG
+          - LB
+          - OZ
+          description: Unit of weight.
+      required:
+      - value
+      - weightUnit
+    PostageType:
+      type: string
+      enum:
+      - PUBLICATION
+      - SAME DAY
+      - NEXT DAY
+      - STANDARD
+      - USPS Ground Advantage
+      - PostNL International Packet Tracked
+      - OTHER
+      description: Preferred postage type. Domestic shipments typically use SAME DAY, NEXT DAY, or STANDARD.
+        Cross-border CA→US shipments use USPS Ground Advantage (DDP) or PostNL International Packet Tracked
+        (DDU). If the requested type is unavailable, an available type is selected automatically.
+    ShipmentLineItem:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Item description.
+        quantity:
+          type: integer
+          description: Quantity (must be a positive integer).
+        unit_value:
+          type: number
+          description: Value per unit. Accepted as unit_value (snake_case) or unitValue (camelCase).
+        currency:
+          type: string
+          enum:
+          - CAD
+          - USD
+          description: Currency code.
+        hs_code:
+          type: string
+          description: HS tariff code for cross-border shipments. Accepted as hs_code or hsCode.
+        country_of_origin:
+          type: string
+          description: ISO country code of manufacture. Accepted as country_of_origin or countryOfOrigin.
+        sku:
+          type: string
+          description: Your internal SKU reference.
+        manufacturer:
+          type: object
+          description: Manufacturer details. Required for some cross-border shipments.
+          properties:
+            name:
+              type: string
+              description: Manufacturer name (min 3 characters).
+            address1:
+              type: string
+              description: Street address.
+            address2:
+              type: string
+              description: Address line 2.
+            city:
+              type: string
+              description: City.
+            provinceCode:
+              type: string
+              description: Province or state code.
+            postalCode:
+              type: string
+              description: Postal or ZIP code.
+            countryCode:
+              type: string
+              description: ISO 3166-1 alpha-2 country code (e.g. CN, US, CA).
+            phone:
+              type: string
+              description: Manufacturer phone number.
+            email:
+              type: string
+              format: email
+              description: Manufacturer email address.
+          required:
+          - name
+          - address1
+          - city
+          - countryCode
+      required:
+      - description
+      - quantity
+      - unit_value
+      - currency
+    ShipmentStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PENDING
+      - PENDING_REVIEW
+      - PICKUP_REQUESTED
+      - PICKUP_CANCELLED
+      - PARTNER_RECEIVED
+      - PICKED_UP
+      - RECEIVED
+      - GATEWAY_TRANSIT
+      - PARCEL_SCANNED
+      - TRANSSHIPMENT_COMPLETE
+      - IN_TRANSIT
+      - OUT_FOR_DELIVERY
+      - DELIVERED
+      - SHIPMENT_EXCEPTION
+      - AGED_OUT
+      - RETURNED
+      - CANCELLED
+      - STORAGE
+      - FAILED
+      - FAILED_DELIVERY1
+      - FAILED_DELIVERY2
+      - GATEWAY_TO_GATEWAY_TRANSIT
+      - GATEWAY_TRANSIT_OUT
+      description: Shipment status.
+    BillingSummary:
+      type: object
+      properties:
+        postageType:
+          $ref: '#/components/schemas/PostageType'
+        postageFee:
+          type: number
+          description: Postage fee.
+        signatureFee:
+          type: number
+          description: Signature fee.
+        duty:
+          type: number
+          description: Duty amount (cross-border shipments only).
+        tax:
+          type: number
+          description: Tax amount.
+        total:
+          type: number
+          description: Total cost.
+        currency:
+          type: string
+          enum:
+          - CAD
+          - USD
+          description: Currency code.
+    ListShipmentsResponseData:
+      type: object
+      properties:
+        shipments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentResponseData'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - shipments
+      - pagination
+    PricingQuoteRequest:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+          description: Package dimensions. Provide either dimensions or packagingId, not both. If neither
+            is provided, a saved default packaging preset will be used. If there are no saved packaging
+            presets, dimensions are required.
+        packagingId:
+          type: number
+          description: ID of a pre-configured packaging profile. Use instead of dimensions if the package
+            matches a saved profile.
+        weight:
+          $ref: '#/components/schemas/Weight'
+        postageType:
+          type: string
+          enum:
+          - STANDARD
+          - USPS Ground Advantage
+          - PostNL International Packet Tracked
+          description: Requested postage service. STANDARD is for domestic. USPS Ground Advantage is for
+            CA to US cross-border (DDP, merchant pays duties). PostNL International Packet Tracked is
+            for CA to US cross-border (DDU, recipient pays duties). If the requested type is unavailable,
+            an available type is selected automatically.
+      required:
+      - address
+      - weight
+      - postageType
+    PricingQuoteResponseData:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+          description: List of estimated rates. May be empty if no service is available for the given
+            inputs.
+        carrierName:
+          type: string
+        estimated:
+          type: boolean
+        disclaimer:
+          type: string
+      required:
+      - rates
+      - carrierName
+      - estimated
+      - disclaimer
+    Rate:
+      type: object
+      properties:
+        postageType:
+          type: string
+        carrierName:
+          type: string
+        postageFee:
+          type: number
+        tax:
+          type: number
+        total:
+          type: number
+        currency:
+          type: string
+          description: Always returned as CAD, including cross-border CA to US routes.
+        estimated:
+          type: boolean
+        minDeliveryDays:
+          type: number
+        maxDeliveryDays:
+          type: number
+      required:
+      - postageType
+      - carrierName
+      - postageFee
+      - tax
+      - total
+      - currency
+      - estimated
+      - minDeliveryDays
+      - maxDeliveryDays
+    PurchaseShipmentResponseData:
+      type: object
+      properties:
+        trackingId:
+          type: string
+          description: Shipment tracking ID.
+        orderNumber:
+          type: string
+          description: Order number.
+        insuranceCreated:
+          type: boolean
+          description: Whether parcel protection was created.
+      required:
+      - trackingId
+      - orderNumber
+    RetrieveShipmentResponseData:
+      type: object
+      properties:
+        shipment:
+          $ref: '#/components/schemas/ShipmentResponseData'
+      required:
+      - shipment
+    TrackingResponseData:
+      type: object
+      properties:
+        trackingId:
+          type: string
+          description: Shipment tracking ID.
+        status:
+          type: string
+          description: Current shipment status.
+        statusCode:
+          type: integer
+          description: Internal status code.
+        orderNumber:
+          type: string
+          description: Order number.
+        labelCreatedAt:
+          type: integer
+          description: Unix timestamp (ms) when label was created.
+        recipient:
+          type: object
+          properties:
+            fullName:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+              format: email
+          required:
+          - fullName
+        destination:
+          $ref: '#/components/schemas/Address'
+        batchId:
+          type: string
+        note:
+          type: string
+        signatureRequired:
+          type: boolean
+        weight:
+          $ref: '#/components/schemas/Weight'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingEvent'
+      required:
+      - trackingId
+      - status
+      - orderNumber
+    TrackingEvent:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Shipment status string at time of event (e.g. `OUT_FOR_DELIVERY`, `DELIVERED`).
+        statusCode:
+          type: integer
+          description: Numeric status code corresponding to the status.
+        timestamp:
+          type: integer
+          description: Unix timestamp in milliseconds.
+        location:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Location name.
+            lat:
+              type: number
+              description: Latitude.
+            lng:
+              type: number
+              description: Longitude.
+        description:
+          type: string
+          description: Additional notes about the event.
+    WebhookPayload:
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - shipment.status_updated
+          - shipment.custom_event
+          description: Webhook event type.
+        version:
+          type: string
+          description: Schema version of the webhook payload.
+        data:
+          type: object
+          properties:
+            objectType:
+              type: string
+              enum:
+              - Shipment
+              description: Object type discriminator.
+            trackingId:
+              type: string
+              description: Shipment tracking ID.
+            status:
+              type: string
+              description: New shipment status.
+            statusCode:
+              type: integer
+              description: Internal status code.
+            updatedAt:
+              type: string
+              format: date-time
+            address:
+              $ref: '#/components/schemas/Address'
+            transferCarrierName:
+              type: string
+              description: Name of the transfer carrier when package is handed off.
+            transferCarrierTrackingId:
+              type: string
+              description: Tracking ID assigned by the transfer carrier.
+            proofOfDelivery:
+              type: object
+              description: Included when status is DELIVERED.
+              properties:
+                recipient:
+                  type: string
+                  description: Name of person who received the parcel.
+                deliveryDate:
+                  type: string
+                  format: date
+                  description: YYYY-MM-DD.
+                deliveryTime:
+                  type: string
+                  description: HH:mm:ss.
+                trackingNumber:
+                  type: string
+                  description: Tracking number used for proof of delivery.
+                pods:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  description: Proof of delivery image URLs.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API access token generated from the UniUni Platform dashboard.

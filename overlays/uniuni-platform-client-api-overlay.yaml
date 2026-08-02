@@ -1,0 +1,32 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the UniUni Platform Client API
+  version: 1.0.0
+extends: openapi/uniuni-platform-client-api-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist:
+        provider: uniuni
+        harvested: '2026-07-21'
+        source: https://help.ship.uniuni.com/en/api/introduction
+        notes: >-
+          Spec reassembled from the provider-published per-endpoint OpenAPI fragments on
+          help.ship.uniuni.com (Mintlify .md exports). Sandbox client paths are served under
+          /client/ on the sandbox host; production under /prod/client/.
+  - target: $.info
+    update:
+      x-artifacts:
+        conventions: conventions/uniuni-conventions.yml
+        errors: errors/uniuni-problem-types.yml
+        webhooks: asyncapi/uniuni-webhooks.yml
+        sandbox: sandbox/uniuni-sandbox.yml
+        authentication: authentication/uniuni-authentication.yml
+        data-model: data-model/uniuni-data-model.yml
+  - target: $.tags
+    update:
+      - name: x-apievangelist-note
+        description: >-
+          Business errors return HTTP 200 with a non-zero envelope code — clients must branch on
+          data envelope code, not HTTP status. No idempotency-key contract; retries of purchase
+          operations should first re-read shipment state.

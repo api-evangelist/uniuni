@@ -1,0 +1,30 @@
+{
+  "provider": "uniuni",
+  "sources": [
+    "uniuni-batches-api-openapi.yml",
+    "uniuni-labels-api-openapi.yml",
+    "uniuni-shipments-api-openapi.yml",
+    "uniuni-tracking-api-openapi.yml",
+    "uniuni-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "uniuni-batches-api-openapi.yml",
+    "uniuni-labels-api-openapi.yml",
+    "uniuni-shipments-api-openapi.yml",
+    "uniuni-tracking-api-openapi.yml",
+    "uniuni-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [
+    "uniuni-batches-api-openapi.yml: dangling $ref: #/components/parameters/BatchNumber",
+    "uniuni-batches-api-openapi.yml: dangling $ref: #/components/parameters/Page",
+    "uniuni-batches-api-openapi.yml: dangling $ref: #/components/parameters/PageSize",
+    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/parameters/OrderNumber",
+    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/parameters/Page",
+    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/parameters/PageSize",
+    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/responses/ValidationError"
+  ],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

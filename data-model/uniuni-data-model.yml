@@ -1,0 +1,61 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/uniuni-platform-client-api-openapi.yml
+notes: >-
+  Entity-relationship graph derived from the UniUni Platform Client API schemas and webhook
+  payloads. Shipments are the core entity, identified by orderNumber (e.g. UNI05893840E) and a
+  trackingId (UR + 17 digits); batches carry URB-prefixed tracking IDs.
+entities:
+  - name: Shipment
+    id_field: orderNumber
+    tracking_id_format: 'UR + 17 digits (e.g. UR06250000000000351)'
+    lifecycle: DRAFT -> PENDING -> first/middle/last-mile statuses -> DELIVERED/RETURNED/FAILED
+    key_fields: [orderNumber, trackingId, status, statusCode, recipient, destination, weight, dimensions, signatureRequired, batchId, note]
+  - name: Batch
+    id_field: batchNumber
+    tracking_id_format: 'URB + 16 digits'
+    key_fields: [batchNumber, shipmentOrderNumbers]
+  - name: Label
+    id_field: id
+    key_fields: [labelType (shipping|batch), body (Base64 PDF)]
+  - name: TrackingEvent
+    key_fields: [status, statusCode, timestamp, location, description]
+  - name: Address
+    key_fields: [address1, address2, address3, city, province, postalCode, country, latitude, longitude]
+  - name: Weight
+    key_fields: [value, weightUnit (G|KG|LB|OZ)]
+  - name: Dimensions
+    key_fields: [length, width, height, dimensionUnit (CM|INCH|M|FT)]
+  - name: Insurance
+    id_field: id
+    source: webhook insurance.status_updated
+    key_fields: [id, shipmentOrderNumber, status, updatedAt]
+relationships:
+  - from: Batch
+    to: Shipment
+    kind: has_many
+    via: shipmentOrderNumbers
+  - from: Shipment
+    to: Batch
+    kind: belongs_to
+    via: batchId
+  - from: Shipment
+    to: Label
+    kind: has_one
+    via: label id (labelType shipping)
+  - from: Batch
+    to: Label
+    kind: has_one
+    via: label id (labelType batch)
+  - from: Shipment
+    to: TrackingEvent
+    kind: has_many
+    via: events[]
+  - from: Shipment
+    to: Address
+    kind: has_one
+    via: destination
+  - from: Insurance
+    to: Shipment
+    kind: belongs_to
+    via: shipmentOrderNumber
