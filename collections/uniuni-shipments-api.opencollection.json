@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UniUni Platform Client Batches Shipments API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Shipments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a shipment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/shipments/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new shipment in DRAFT status. The shipment must be purchased separately before a label can be generated."
+        },
+        {
+          "info": {
+            "name": "Delete a Shipment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/shipments/:orderNumber/delete"
+          },
+          "docs": "Deletes a shipment. Only shipments in DRAFT status can be deleted."
+        },
+        {
+          "info": {
+            "name": "List all shipments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ship.uniuni.com/prod/client/shipments",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by shipment status."
+              },
+              {
+                "name": "fromDate",
+                "value": "",
+                "type": "query",
+                "description": "Filter shipments created on or after this date (YYYY-MM-DD)."
+              },
+              {
+                "name": "toDate",
+                "value": "",
+                "type": "query",
+                "description": "Filter shipments created on or before this date (YYYY-MM-DD)."
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search keyword. Matches against order number, tracking ID, recipient name, phone, or email."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of shipments with optional filters."
+        },
+        {
+          "info": {
+            "name": "Get a pricing quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/shipments/quote",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns estimated shipping rates for a given destination address, package dimensions, weight, and postage type. Does not create a shipment, reserve a rate, charge the merchant, or guarantee final service availability."
+        },
+        {
+          "info": {
+            "name": "Purchase a shipment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/shipments/:orderNumber/purchase"
+          },
+          "docs": "Purchases a shipment and deducts the cost from your wallet balance. The shipment status changes from DRAFT to PENDING."
+        },
+        {
+          "info": {
+            "name": "Refund a shipment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/shipments/:orderNumber/refund"
+          },
+          "docs": "Requests a refund for a purchased shipment."
+        },
+        {
+          "info": {
+            "name": "Retrieve a shipment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ship.uniuni.com/prod/client/shipments/:orderNumber"
+          },
+          "docs": "Retrieves a specific shipment by its order number."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

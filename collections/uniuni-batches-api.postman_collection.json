@@ -1,0 +1,612 @@
+{
+  "item": [
+    {
+      "id": "8af6d052-a788-476f-9006-e5318930688d",
+      "name": "Batches",
+      "description": {
+        "content": "Group purchased shipments into batches for drop-off or pickup.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ca5f509d-7303-45a6-8f22-a605693c7c73",
+          "name": "Add shipments to a batch",
+          "request": {
+            "name": "Add shipments to a batch",
+            "description": {
+              "content": "Adds one or more purchased shipments to an existing batch. Each shipment can only belong to one batch — adding a shipment already in another batch moves it.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "batch",
+                ":batchNumber",
+                "addShipment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipments\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7e838eec-9fec-4e0f-91fa-7d98220d680e",
+              "name": "Shipments added or error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "batch",
+                    ":batchNumber",
+                    "addShipment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"shipments\": [\n    \"UNI02947917E\",\n    \"UNI0114576F0\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipments added to batch successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"batchNumber\": \"URB0714000000000727\",\n    \"batchName\": \"test\",\n    \"status\": \"PENDING\",\n    \"printedLabel\": false,\n    \"shipmentCount\": 2\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e7f6b959-468b-4e1d-99e5-e5a859de7059",
+          "name": "Create a batch",
+          "request": {
+            "name": "Create a batch",
+            "description": {
+              "content": "Creates a new batch. You can optionally include purchased shipments at creation time, or create an empty batch and add shipments later.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "batch",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"batchName\": \"<string>\",\n  \"shipments\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6b7f4d84-a37f-4a3a-a882-36916e90a45f",
+              "name": "Batch created or error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "batch",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"batchName\": \"Monday Dropoff\",\n  \"shipments\": [\n    \"UNI02947917E\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Success\",\n  \"code\": 0,\n  \"data\": {\n    \"batchNumber\": \"URB0717000000000837\",\n    \"batchName\": \"Monday Dropoff\",\n    \"status\": \"PENDING\",\n    \"printedLabel\": false,\n    \"createdAt\": \"2025-07-17T21:55:05.526Z\",\n    \"updatedAt\": \"2025-07-17T21:55:05.697Z\",\n    \"shipmentCount\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a66a7db-bf00-4307-964e-41708be0e1eb",
+          "name": "Delete a batch",
+          "request": {
+            "name": "Delete a batch",
+            "description": {
+              "content": "Deletes a batch. Only batches that have been received can be deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "batch",
+                ":batchNumber",
+                "delete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "04eeed2d-a803-4cc0-80e0-d342cf65a97b",
+              "name": "Batch deleted or error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "batch",
+                    ":batchNumber",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Batch deleted successfully\",\n  \"code\": 0,\n  \"data\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32ee0ddd-8d58-40d6-9551-bee30fb541cf",
+          "name": "List all batches",
+          "request": {
+            "name": "List all batches",
+            "description": {
+              "content": "Retrieves a paginated list of batches.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "isNotInPickup",
+                  "value": "<boolean>",
+                  "description": "If true, only returns batches that are not in pickup status."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ff8d46ef-e4c7-41b1-82da-3a86fdd93eb0",
+              "name": "Paginated list of batches",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "isNotInPickup",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Success\",\n  \"code\": 0,\n  \"data\": {\n    \"batches\": [\n      {\n        \"batchNumber\": \"URB0805000000000947\",\n        \"batchName\": \"final-test\",\n        \"status\": \"PENDING\",\n        \"printedLabel\": true,\n        \"createdAt\": \"2025-08-05T17:31:27.157Z\",\n        \"updatedAt\": \"2025-08-05T17:34:32.262Z\",\n        \"shipmentCount\": 1\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"pageSize\": 10,\n      \"count\": 25\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aa6c4f39-5d95-44a3-9bbd-e1f9ee93a61f",
+          "name": "Remove shipments from a batch",
+          "request": {
+            "name": "Remove shipments from a batch",
+            "description": {
+              "content": "Removes one or more shipments from a batch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "batch",
+                ":batchNumber",
+                "removeShipment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipments\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "22f10466-d07e-4cda-a13f-d1c8960674d2",
+              "name": "Shipments removed or error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "batch",
+                    ":batchNumber",
+                    "removeShipment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"shipments\": [\n    \"UNI033642B16\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipments removed from batch successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"batchNumber\": \"URB0717000000000837\",\n    \"batchName\": \"test-17\",\n    \"status\": \"PENDING\",\n    \"printedLabel\": false,\n    \"shipmentCount\": 0,\n    \"shipments\": []\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "495363ac-f5e8-475c-ba96-c23e09fb65ae",
+          "name": "Retrieve a batch",
+          "request": {
+            "name": "Retrieve a batch",
+            "description": {
+              "content": "Retrieves detailed information about a specific batch, including its list of shipment order numbers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "batch",
+                ":batchNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b9fb6fd-0943-4b15-b62f-c2ffb08d0353",
+              "name": "Batch details or error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "batch",
+                    ":batchNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Success\",\n  \"code\": 0,\n  \"data\": {\n    \"batchNumber\": \"URB0714000000000687\",\n    \"batchName\": \"Test batch 1 7-14-2025\",\n    \"status\": \"RECEIVED\",\n    \"printedLabel\": false,\n    \"createdAt\": \"2025-07-14T17:59:27.645Z\",\n    \"updatedAt\": \"2025-07-14T18:53:57.669Z\",\n    \"shipmentCount\": 1,\n    \"shipments\": [\n      \"UNI07787536D\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ship.uniuni.com/prod",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2dbc8dc7-2b1e-4117-98da-e654326c1523",
+    "name": "UniUni Platform Client Batches API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.\n\nContact Support:\n Name: UniUni Retail Support\n Email: retailsupport@uniuni.com",
+      "type": "text/plain"
+    }
+  }
+}

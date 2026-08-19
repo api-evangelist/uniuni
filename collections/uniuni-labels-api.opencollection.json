@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UniUni Platform Client Batches Labels API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Labels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get label",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ship.uniuni.com/prod/client/label/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The orderNumber (for shipping labels) or batchNumber (for batch labels)."
+              },
+              {
+                "name": "labelType",
+                "value": "",
+                "type": "query",
+                "description": "Type of label to retrieve."
+              }
+            ]
+          },
+          "docs": "Retrieves a shipping or batching label as a Base64-encoded PDF."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

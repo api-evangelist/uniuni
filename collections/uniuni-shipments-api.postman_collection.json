@@ -1,0 +1,751 @@
+{
+  "item": [
+    {
+      "id": "e02db74c-3d54-4883-ac04-60f36f11769f",
+      "name": "Shipments",
+      "description": {
+        "content": "Create, retrieve, list, purchase, refund, and delete shipments.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b36b197f-1796-4b21-a301-9297adbf27d1",
+          "name": "Create a shipment",
+          "request": {
+            "name": "Create a shipment",
+            "description": {
+              "content": "Creates a new shipment in DRAFT status. The shipment must be purchased separately before a label can be generated.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "shipments",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipient\": {\n    \"name\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"email\": \"<email>\",\n    \"signature\": false\n  },\n  \"address\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"province\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\"\n  },\n  \"weight\": {\n    \"value\": \"<number>\",\n    \"weightUnit\": \"<string>\"\n  },\n  \"shipmentLineItems\": [\n    {\n      \"description\": \"<string>\",\n      \"quantity\": \"<integer>\",\n      \"unit_value\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"hs_code\": \"<string>\",\n      \"country_of_origin\": \"<string>\",\n      \"sku\": \"<string>\",\n      \"manufacturer\": {\n        \"name\": \"<string>\",\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"countryCode\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"provinceCode\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"email\": \"<email>\"\n      }\n    }\n  ],\n  \"postageType\": \"<string>\",\n  \"dimensions\": {\n    \"length\": \"<number>\",\n    \"width\": \"<number>\",\n    \"height\": \"<number>\",\n    \"dimensionUnit\": \"<string>\"\n  },\n  \"packagingId\": \"<integer>\",\n  \"note\": \"<string>\",\n  \"insuranceRequired\": \"<boolean>\",\n  \"orderNumber\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9853577f-61d9-4ba2-bcbc-d87668f952f9",
+              "name": "Shipment created or error returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"recipient\": {\n    \"name\": \"Jane Doe\",\n    \"phone\": \"+1-604-123-4567\",\n    \"email\": \"jane@example.com\",\n    \"signature\": false\n  },\n  \"address\": {\n    \"address1\": \"3460 Cawthra Road\",\n    \"city\": \"Mississauga\",\n    \"province\": \"ON\",\n    \"postalCode\": \"L5A 2Y1\",\n    \"country\": \"CA\"\n  },\n  \"dimensions\": {\n    \"length\": 1,\n    \"width\": 1,\n    \"height\": 1,\n    \"dimensionUnit\": \"INCH\"\n  },\n  \"weight\": {\n    \"value\": 1,\n    \"weightUnit\": \"LB\"\n  },\n  \"postageType\": \"STANDARD\",\n  \"note\": \"Gift Box\",\n  \"shipmentLineItems\": [\n    {\n      \"description\": \"T-shirt\",\n      \"quantity\": 1,\n      \"unit_value\": 10,\n      \"currency\": \"CAD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipment created successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"orderNumber\": \"UNI031455E90\",\n    \"trackingId\": \"UR07300000000005351\",\n    \"recipient\": {\n      \"name\": \"Jane Doe\",\n      \"phone\": \"+1-604-123-4567\",\n      \"email\": \"jane@example.com\"\n    },\n    \"address\": {\n      \"address1\": \"2455 Meadowvale Blvd\",\n      \"city\": \"Mississauga\",\n      \"province\": \"ON\",\n      \"postalCode\": \"L5N 0H1\",\n      \"country\": \"CA\"\n    },\n    \"dimensions\": {\n      \"length\": 1,\n      \"width\": 1,\n      \"height\": 1,\n      \"dimensionUnit\": \"INCH\"\n    },\n    \"weight\": {\n      \"value\": 1,\n      \"weightUnit\": \"LB\"\n    },\n    \"status\": \"DRAFT\",\n    \"note\": \"Gift Box\",\n    \"createdAt\": \"2025-07-30T18:32:11.455Z\",\n    \"updatedAt\": \"2025-07-30T18:32:11.899Z\",\n    \"rates\": {\n      \"postageType\": \"NEXT DAY\",\n      \"postageFee\": 4.88,\n      \"tax\": 0.63,\n      \"total\": 5.51,\n      \"currency\": \"CAD\"\n    },\n    \"shipmentLineItems\": [\n      {\n        \"description\": \"T-shirt\",\n        \"quantity\": 1,\n        \"unit_value\": 10,\n        \"currency\": \"CAD\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "623e4b8b-172f-490a-8330-52d30fddef79",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"recipient\": {\n    \"name\": \"Jane Doe\",\n    \"phone\": \"+1-604-123-4567\",\n    \"email\": \"jane@example.com\",\n    \"signature\": false\n  },\n  \"address\": {\n    \"address1\": \"3460 Cawthra Road\",\n    \"city\": \"Mississauga\",\n    \"province\": \"ON\",\n    \"postalCode\": \"L5A 2Y1\",\n    \"country\": \"CA\"\n  },\n  \"dimensions\": {\n    \"length\": 1,\n    \"width\": 1,\n    \"height\": 1,\n    \"dimensionUnit\": \"INCH\"\n  },\n  \"weight\": {\n    \"value\": 1,\n    \"weightUnit\": \"LB\"\n  },\n  \"postageType\": \"STANDARD\",\n  \"note\": \"Gift Box\",\n  \"shipmentLineItems\": [\n    {\n      \"description\": \"T-shirt\",\n      \"quantity\": 1,\n      \"unit_value\": 10,\n      \"currency\": \"CAD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f957be3-fc16-48c5-9256-a23a5056b268",
+          "name": "Delete a Shipment",
+          "request": {
+            "name": "Delete a Shipment",
+            "description": {
+              "content": "Deletes a shipment. Only shipments in DRAFT status can be deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "shipments",
+                ":orderNumber",
+                "delete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a7caf112-0475-4697-96d9-02bbe318665f",
+              "name": "Delete result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments",
+                    ":orderNumber",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipment deleted successfully\",\n  \"code\": 0,\n  \"data\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "45238c4d-c5f0-4b0b-b2ef-efe805f66371",
+          "name": "List all shipments",
+          "request": {
+            "name": "List all shipments",
+            "description": {
+              "content": "Retrieves a paginated list of shipments with optional filters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "shipments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by shipment status."
+                },
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "Filter shipments created on or after this date (YYYY-MM-DD)."
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "<date>",
+                  "description": "Filter shipments created on or before this date (YYYY-MM-DD)."
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Search keyword. Matches against order number, tracking ID, recipient name, phone, or email."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ddb0c349-bb79-4bbc-a83b-6d03bc77e67c",
+              "name": "Paginated list of shipments",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "PICKED_UP"
+                    },
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipments listed successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"shipments\": [\n      {\n        \"orderNumber\": \"UNI029834CA7\",\n        \"trackingId\": \"UR07240000000004901\",\n        \"recipient\": {\n          \"name\": \"Jane Doe\",\n          \"phone\": \"+1-604-123-4567\",\n          \"email\": \"jane@example.com\"\n        },\n        \"address\": {\n          \"address1\": \"2455 Meadowvale Blvd\",\n          \"city\": \"Mississauga\",\n          \"province\": \"ON\",\n          \"postalCode\": \"L5N 0H1\",\n          \"country\": \"CA\"\n        },\n        \"dimensions\": {\n          \"length\": 1,\n          \"width\": 1,\n          \"height\": 1,\n          \"dimensionUnit\": \"INCH\"\n        },\n        \"weight\": {\n          \"value\": 1,\n          \"weightUnit\": \"LB\"\n        },\n        \"status\": \"PENDING\",\n        \"note\": \"Gift Box\",\n        \"createdAt\": \"2025-07-24T23:32:09.834Z\",\n        \"updatedAt\": \"2025-07-25T00:41:53.815Z\",\n        \"rates\": {\n          \"postageType\": \"NEXT DAY\",\n          \"postageFee\": 4.88,\n          \"tax\": 0.63,\n          \"total\": 5.51,\n          \"currency\": \"CAD\"\n        },\n        \"shipmentLineItems\": [\n          {\n            \"description\": \"T-shirt\",\n            \"quantity\": 1,\n            \"unit_value\": 10,\n            \"currency\": \"CAD\"\n          }\n        ]\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"pageSize\": 10,\n      \"count\": 63\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "15c92b80-a518-44d8-b210-999d35819d3c",
+          "name": "Get a pricing quote",
+          "request": {
+            "name": "Get a pricing quote",
+            "description": {
+              "content": "Returns estimated shipping rates for a given destination address, package dimensions, weight, and postage type. Does not create a shipment, reserve a rate, charge the merchant, or guarantee final service availability.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "shipments",
+                "quote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"province\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"latitude\": \"<number>\",\n    \"longitude\": \"<number>\"\n  },\n  \"weight\": {\n    \"value\": \"<number>\",\n    \"weightUnit\": \"<string>\"\n  },\n  \"postageType\": \"<string>\",\n  \"dimensions\": {\n    \"length\": \"<number>\",\n    \"width\": \"<number>\",\n    \"height\": \"<number>\",\n    \"dimensionUnit\": \"<string>\"\n  },\n  \"packagingId\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2923c38d-4798-4e4e-9ccc-e399c468a4ce",
+              "name": "Estimated rates retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"province\": \"string\",\n    \"postalCode\": \"string\",\n    \"country\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"latitude\": 8621.751224667558,\n    \"longitude\": 1282.0710415618641\n  },\n  \"weight\": {\n    \"value\": 9132.730364793224,\n    \"weightUnit\": \"G\"\n  },\n  \"postageType\": \"<string>\",\n  \"dimensions\": {\n    \"length\": 4081.466616358207,\n    \"width\": 2995.09453842709,\n    \"height\": 9973.644117321539,\n    \"dimensionUnit\": \"FT\"\n  },\n  \"packagingId\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Estimated rates retrieved successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"rates\": [\n      {\n        \"postageType\": \"NEXT DAY\",\n        \"carrierName\": \"UniUni\",\n        \"postageFee\": 1.3,\n        \"tax\": 0,\n        \"total\": 1.3,\n        \"currency\": \"CAD\",\n        \"estimated\": true,\n        \"minDeliveryDays\": 1,\n        \"maxDeliveryDays\": 2\n      }\n    ],\n    \"carrierName\": \"UniUni\",\n    \"estimated\": true,\n    \"disclaimer\": \"Rates are estimates only and do not guarantee final shipment eligibility, service availability, or delivery.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81bc5740-443f-4182-a87b-5fa28f48c938",
+          "name": "Purchase a shipment",
+          "request": {
+            "name": "Purchase a shipment",
+            "description": {
+              "content": "Purchases a shipment and deducts the cost from your wallet balance. The shipment status changes from DRAFT to PENDING.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "shipments",
+                ":orderNumber",
+                "purchase"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b6148a57-3d59-4531-bd3d-71598e38be3a",
+              "name": "Purchase result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments",
+                    ":orderNumber",
+                    "purchase"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipment purchased successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"trackingId\": \"UR07240000000004901\",\n    \"orderNumber\": \"UNI029834CA7\",\n    \"insuranceCreated\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1195b60a-de05-42c2-91c9-fe3b8d85d164",
+          "name": "Refund a shipment",
+          "request": {
+            "name": "Refund a shipment",
+            "description": {
+              "content": "Requests a refund for a purchased shipment.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "shipments",
+                ":orderNumber",
+                "refund"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1c729979-0578-4d65-af32-e978a3a60577",
+              "name": "Refund result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments",
+                    ":orderNumber",
+                    "refund"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipment refunded successfully\",\n  \"code\": 0,\n  \"data\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6382ef1-25be-429e-a72c-f997f24ab539",
+          "name": "Retrieve a shipment",
+          "request": {
+            "name": "Retrieve a shipment",
+            "description": {
+              "content": "Retrieves a specific shipment by its order number.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "shipments",
+                ":orderNumber"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ec5be5a3-8c79-491f-9388-a7ff270fef9d",
+              "name": "Shipment retrieved or error returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "shipments",
+                    ":orderNumber"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Shipment retrieved successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"shipment\": {\n      \"orderNumber\": \"UNI0199855FF\",\n      \"trackingId\": \"UR05310000000001281\",\n      \"recipient\": {\n        \"name\": \"Jane Doe\",\n        \"email\": \"jane@example.com\"\n      },\n      \"address\": {\n        \"address1\": \"88 Harbour St\",\n        \"city\": \"Toronto\",\n        \"province\": \"ON\",\n        \"postalCode\": \"M7A 2S1\",\n        \"country\": \"Canada\"\n      },\n      \"dimensions\": {\n        \"length\": 1,\n        \"width\": 1,\n        \"height\": 1,\n        \"dimensionUnit\": \"INCH\"\n      },\n      \"weight\": {\n        \"value\": 2,\n        \"weightUnit\": \"LB\"\n      },\n      \"status\": \"PENDING\",\n      \"note\": \"\",\n      \"createdAt\": \"2025-05-31T20:48:39.986Z\",\n      \"updatedAt\": \"2025-07-25T17:29:30.772Z\",\n      \"rates\": {\n        \"postageType\": \"NEXT DAY\",\n        \"postageFee\": 4.93,\n        \"tax\": 0.64,\n        \"total\": 5.57,\n        \"currency\": \"CAD\"\n      },\n      \"shipmentLineItems\": []\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ship.uniuni.com/prod",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4b19dbe2-0fae-4ea0-9f89-9392c4b00c45",
+    "name": "UniUni Platform Client Batches Shipments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.\n\nContact Support:\n Name: UniUni Retail Support\n Email: retailsupport@uniuni.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UniUni Platform Client Batches Tracking API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tracking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "TrackShipmentbyTrackingId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ship.uniuni.com/prod/client/tracking",
+            "params": [
+              {
+                "name": "trackingId",
+                "value": "UR06250000000000351",
+                "type": "query",
+                "description": "The shipment tracking ID. Must be 19 characters starting with `UR` (e.g. `UR06250000000000351`) or 19 characters starting with `URB` (batch tracking ID)."
+              }
+            ]
+          },
+          "docs": "Retrieves tracking information for a shipment by its tracking ID, including status, recipient, address, dimensions, and scan events."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

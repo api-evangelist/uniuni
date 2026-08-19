@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UniUni Platform Client Batches API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Batches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add shipments to a batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/batch/:batchNumber/addShipment",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds one or more purchased shipments to an existing batch. Each shipment can only belong to one batch — adding a shipment already in another batch moves it."
+        },
+        {
+          "info": {
+            "name": "Create a batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/batch/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new batch. You can optionally include purchased shipments at creation time, or create an empty batch and add shipments later."
+        },
+        {
+          "info": {
+            "name": "Delete a batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/batch/:batchNumber/delete"
+          },
+          "docs": "Deletes a batch. Only batches that have been received can be deleted."
+        },
+        {
+          "info": {
+            "name": "List all batches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ship.uniuni.com/prod/client/batch",
+            "params": [
+              {
+                "name": "isNotInPickup",
+                "value": "",
+                "type": "query",
+                "description": "If true, only returns batches that are not in pickup status."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of batches."
+        },
+        {
+          "info": {
+            "name": "Remove shipments from a batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ship.uniuni.com/prod/client/batch/:batchNumber/removeShipment",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes one or more shipments from a batch."
+        },
+        {
+          "info": {
+            "name": "Retrieve a batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ship.uniuni.com/prod/client/batch/:batchNumber"
+          },
+          "docs": "Retrieves detailed information about a specific batch, including its list of shipment order numbers."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

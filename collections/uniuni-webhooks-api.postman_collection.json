@@ -1,0 +1,134 @@
+{
+  "item": [
+    {
+      "id": "88b25bae-e627-4982-828a-70529f61efb4",
+      "name": "Webhooks",
+      "description": {
+        "content": "Receive real-time shipment status updates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "afd227a4-22f6-4ede-b0bc-51504a710d43",
+          "name": "Test Webhook",
+          "request": {
+            "name": "Test Webhook",
+            "description": {
+              "content": "Sends a test webhook payload to your configured webhook endpoint to verify your integration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "test"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"<string>\",\n  \"version\": \"<string>\",\n  \"data\": {\n    \"objectType\": \"<string>\",\n    \"trackingId\": \"<string>\",\n    \"status\": \"<string>\",\n    \"statusCode\": \"<integer>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"province\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"country\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"latitude\": \"<number>\",\n      \"longitude\": \"<number>\"\n    },\n    \"transferCarrierName\": \"<string>\",\n    \"transferCarrierTrackingId\": \"<string>\",\n    \"proofOfDelivery\": {\n      \"recipient\": \"<string>\",\n      \"deliveryDate\": \"<date>\",\n      \"deliveryTime\": \"<string>\",\n      \"trackingNumber\": \"<string>\",\n      \"pods\": [\n        \"<uri>\",\n        \"<uri>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "520ee9ff-2e2d-4f26-a74f-db05f55fb483",
+              "name": "Webhook test result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "test"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"shipment.status_updated\",\n  \"data\": {\n    \"address\": {\n      \"address1\": \"123 Main St\",\n      \"address2\": \"Suite 100\",\n      \"city\": \"Vancouver\",\n      \"province\": \"BC\",\n      \"postalCode\": \"V6B 1A1\",\n      \"country\": \"CA\"\n    },\n    \"status\": \"DELIVERED\",\n    \"statusCode\": 203,\n    \"trackingId\": \"UR11170000000023641\",\n    \"updatedAt\": \"2025-11-28T00:05:25.917Z\",\n    \"proofOfDelivery\": {\n      \"recipient\": \"John Doe\",\n      \"deliveryDate\": \"2025-11-28\",\n      \"deliveryTime\": \"00:05:25\",\n      \"pods\": [\n        \"https://delivery-service-api.uniuni.ca/images/abcd001\",\n        \"https://delivery-service-api.uniuni.ca/images/abcd002\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ship.uniuni.com/prod",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cf042b5a-23b6-4236-abfd-3be8d24ec932",
+    "name": "UniUni Platform Client Batches Webhooks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.\n\nContact Support:\n Name: UniUni Retail Support\n Email: retailsupport@uniuni.com",
+      "type": "text/plain"
+    }
+  }
+}

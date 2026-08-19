@@ -1,0 +1,133 @@
+{
+  "item": [
+    {
+      "id": "f87a5dfa-6960-48b2-ab84-0ac421d913f8",
+      "name": "Tracking",
+      "description": {
+        "content": "Track shipment status and scan events.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "29186b05-75fa-4c13-9975-b265e67d13db",
+          "name": "TrackShipmentbyTrackingId",
+          "request": {
+            "name": "TrackShipmentbyTrackingId",
+            "description": {
+              "content": "Retrieves tracking information for a shipment by its tracking ID, including status, recipient, address, dimensions, and scan events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "trackingId",
+                  "value": "<string>",
+                  "description": "(Required) The shipment tracking ID. Must be 19 characters starting with `UR` (e.g. `UR06250000000000351`) or 19 characters starting with `URB` (batch tracking ID)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "97f29ae3-60f6-4077-9b41-789004e6896b",
+              "name": "Tracking info or error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "tracking"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "trackingId",
+                      "value": "UR06250000000000351"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Tracking shipment successfully\",\n  \"code\": 0,\n  \"data\": {\n    \"trackingId\": \"UR06250000000000351\",\n    \"status\": \"RECEIVED\",\n    \"orderNumber\": \"UNI05893840E\",\n    \"recipient\": {\n      \"fullName\": \"Jane Doe\",\n      \"email\": \"jane@example.com\"\n    },\n    \"destination\": {\n      \"address1\": \"5 Chagall Dr\",\n      \"city\": \"Vaughan\",\n      \"province\": \"ON\",\n      \"postalCode\": \"L4J 9B2\",\n      \"country\": \"Canada\"\n    },\n    \"signatureRequired\": false,\n    \"weight\": {\n      \"value\": 1,\n      \"weightUnit\": \"LB\"\n    },\n    \"dimensions\": {\n      \"length\": 1,\n      \"width\": 1,\n      \"height\": 1,\n      \"dimensionUnit\": \"INCH\"\n    },\n    \"events\": [\n      {\n        \"statusCode\": \"RECEIVED\",\n        \"timestamp\": 1750878222724,\n        \"location\": {\n          \"name\": \"423 Four Valley Dr\",\n          \"lat\": 43.8361,\n          \"lng\": -79.5686\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ship.uniuni.com/prod",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "54ff90e7-a47b-4fe9-8176-685a7c6909c5",
+    "name": "UniUni Platform Client Batches Tracking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.\n\nContact Support:\n Name: UniUni Retail Support\n Email: retailsupport@uniuni.com",
+      "type": "text/plain"
+    }
+  }
+}

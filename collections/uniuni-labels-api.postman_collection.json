@@ -1,0 +1,151 @@
+{
+  "item": [
+    {
+      "id": "c89622d5-b4c2-43f8-a889-a86bf2b3e4cf",
+      "name": "Labels",
+      "description": {
+        "content": "Retrieve shipping and batch labels as Base64-encoded PDFs.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ea3ee777-52f1-47c2-8223-56f9c5296875",
+          "name": "Get label",
+          "request": {
+            "name": "Get label",
+            "description": {
+              "content": "Retrieves a shipping or batching label as a Base64-encoded PDF.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "client",
+                "label",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "labelType",
+                  "value": "<string>",
+                  "description": "(Required) Type of label to retrieve."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The orderNumber (for shipping labels) or batchNumber (for batch labels)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48c885d1-8e9b-49d9-84be-3251a5eb1b63",
+              "name": "Label PDF or error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "client",
+                    "label",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "labelType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The orderNumber (for shipping labels) or batchNumber (for batch labels)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Success\",\n  \"code\": 0,\n  \"data\": {\n    \"headers\": {\n      \"Content-Type\": \"application/pdf\",\n      \"Content-Disposition\": \"attachment; filename=\\\"UR07240000000004901_shipping_labels_2025-07-31.pdf\\\"\"\n    },\n    \"body\": \"JVBERi0xLjMKJf////8K...\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ship.uniuni.com/prod",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "15dcc08a-d2d3-43ce-8b3d-44d019afce2a",
+    "name": "UniUni Platform Client Batches Labels API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API for creating shipments, purchasing labels, managing batches, tracking deliveries, and receiving webhook notifications.\n\nContact Support:\n Name: UniUni Retail Support\n Email: retailsupport@uniuni.com",
+      "type": "text/plain"
+    }
+  }
+}
