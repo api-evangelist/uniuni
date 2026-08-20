@@ -40,6 +40,14 @@ tags:
 - Company
 - Logistics
 - Shipping
+- Last Mile Delivery
+- E-Commerce
+- Tracking
+- Delivery
+tags_raw:
+- Company
+- Logistics
+- Shipping
 - Last-Mile Delivery
 - Ecommerce
 - Tracking
@@ -126,6 +134,8 @@ apis:
   humanURL: https://help.ship.uniuni.com/en/api/introduction
   baseURL: https://api.ship.uniuni.com/prod/client/
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
