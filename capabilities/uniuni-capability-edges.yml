@@ -1,0 +1,36 @@
+slug: uniuni
+provider: UniUni
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Transportation & Logistics
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Tracking
+  spec_file: uniuni-tracking-api-openapi.yml
+  capability_id: BC-2510.20
+  capability_id_l1: BC-2510
+  capability_name: Shipment Tracking Management
+  confidence: 0.9
+  evidence: 'GET /client/tracking  trackShipment  TrackShipmentbyTrackingId; schemas: TrackingResponseData,
+    TrackingEvent'
+  reason: Resolution and exposure of parcel status by tracking id with tracking events is squarely customer-facing
+    shipment tracking.
+- tag: Shipments
+  spec_file: uniuni-shipments-api-openapi.yml
+  capability_id: BC-2400.40
+  capability_id_l1: BC-2400
+  capability_name: Booking and Reservation Management
+  confidence: 0.75
+  evidence: POST /client/shipments/create  Create a shipment; POST /client/shipments/{orderNumber}/purchase  Purchase
+    a shipment; POST /client/shipments/quote  Get a pricing quote
+  reason: Merchants create, quote, purchase, cancel and refund shipments against the carrier's published
+    services — acceptance, modification and cancellation of bookings. Pricing quote is a secondary rating
+    aspect, hence not full confidence on the sub-capability.

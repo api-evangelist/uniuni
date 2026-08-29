@@ -160,6 +160,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/uniuni-capability-edges.yml
+  name: UniUni Business Capability Map
 - type: Overlay
   url: overlays/uniuni-platform-client-api-overlay.yaml
 - type: Website
