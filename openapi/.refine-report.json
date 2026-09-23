@@ -1,11 +1,7 @@
 {
   "provider": "uniuni",
   "sources": [
-    "uniuni-batches-api-openapi.yml",
-    "uniuni-labels-api-openapi.yml",
-    "uniuni-shipments-api-openapi.yml",
-    "uniuni-tracking-api-openapi.yml",
-    "uniuni-webhooks-api-openapi.yml"
+    "_original/uniuni-platform-client-api-openapi.yml"
   ],
   "outputs": [
     "uniuni-batches-api-openapi.yml",
@@ -16,15 +12,23 @@
   ],
   "archived": [],
   "errors": [
-    "uniuni-batches-api-openapi.yml: dangling $ref: #/components/parameters/BatchNumber",
-    "uniuni-batches-api-openapi.yml: dangling $ref: #/components/parameters/Page",
-    "uniuni-batches-api-openapi.yml: dangling $ref: #/components/parameters/PageSize",
-    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/parameters/OrderNumber",
-    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/parameters/Page",
-    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/parameters/PageSize",
-    "uniuni-shipments-api-openapi.yml: dangling $ref: #/components/responses/ValidationError"
+    "uniuni-platform-client-api-openapi.yml: dangling $ref: #/components/parameters/BatchNumber",
+    "uniuni-platform-client-api-openapi.yml: dangling $ref: #/components/parameters/OrderNumber",
+    "uniuni-platform-client-api-openapi.yml: dangling $ref: #/components/parameters/Page",
+    "uniuni-platform-client-api-openapi.yml: dangling $ref: #/components/parameters/PageSize",
+    "uniuni-platform-client-api-openapi.yml: dangling $ref: #/components/responses/ValidationError"
   ],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "uniuni-platform-client-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "uniuni-batches-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uniuni-labels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uniuni-shipments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uniuni-tracking-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "uniuni-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
