@@ -341,34 +341,6 @@ paths:
                     data: null
 components:
   schemas:
-    BatchMutationResponseData:
-      type: object
-      description: Partial batch summary returned after add/remove shipment operations.
-      properties:
-        batchNumber:
-          type: string
-        batchName:
-          type: string
-          nullable: true
-        status:
-          type: string
-          enum:
-          - PENDING
-          - PICKUP_REQUESTED
-          - PICKUP_CANCELLED
-          - PARTNER_RECEIVED
-          - PICKED_UP
-          - RECEIVED
-          description: Batch status.
-        printedLabel:
-          type: boolean
-        shipmentCount:
-          type: integer
-      required:
-      - batchNumber
-      - status
-      - printedLabel
-      - shipmentCount
     Batch:
       type: object
       properties:
@@ -405,6 +377,44 @@ components:
           items:
             type: string
           description: List of shipment order numbers.
+    BatchMutationResponseData:
+      type: object
+      description: Partial batch summary returned after add/remove shipment operations.
+      properties:
+        batchNumber:
+          type: string
+        batchName:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+        shipmentCount:
+          type: integer
+      required:
+      - batchNumber
+      - status
+      - printedLabel
+      - shipmentCount
+    BatchShipmentsRequest:
+      type: object
+      properties:
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of order numbers.
+      required:
+      - shipments
     CreateBatchRequest:
       type: object
       properties:
@@ -416,16 +426,6 @@ components:
           items:
             type: string
           description: List of order numbers to include. Only purchased shipments can be added.
-    BatchShipmentsRequest:
-      type: object
-      properties:
-        shipments:
-          type: array
-          items:
-            type: string
-          description: List of order numbers.
-      required:
-      - shipments
     BatchResponseData:
       type: object
       properties:

@@ -95,6 +95,79 @@ paths:
                     data: null
 components:
   schemas:
+    Dimensions:
+      type: object
+      properties:
+        length:
+          type: number
+          description: Length.
+        width:
+          type: number
+          description: Width.
+        height:
+          type: number
+          description: Height.
+        dimensionUnit:
+          type: string
+          enum:
+          - CM
+          - INCH
+          - M
+          - FT
+          description: Unit of dimension.
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          description: Weight value.
+        weightUnit:
+          type: string
+          enum:
+          - G
+          - KG
+          - LB
+          - OZ
+          description: Unit of weight.
+      required:
+      - value
+      - weightUnit
+    Address:
+      type: object
+      properties:
+        address1:
+          type: string
+          description: Address line 1.
+        address2:
+          type: string
+          description: Address line 2.
+        address3:
+          type: string
+          description: Address line 3.
+        city:
+          type: string
+          description: City.
+        province:
+          type: string
+          description: Province or state code.
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+        country:
+          type: string
+          description: Country code (e.g. CA, US).
+        latitude:
+          type: number
+          description: Latitude.
+        longitude:
+          type: number
+          description: Longitude.
+      required:
+      - address1
+      - city
+      - province
+      - postalCode
+      - country
     TrackingEvent:
       type: object
       properties:
@@ -172,79 +245,6 @@ components:
       - trackingId
       - status
       - orderNumber
-    Dimensions:
-      type: object
-      properties:
-        length:
-          type: number
-          description: Length.
-        width:
-          type: number
-          description: Width.
-        height:
-          type: number
-          description: Height.
-        dimensionUnit:
-          type: string
-          enum:
-          - CM
-          - INCH
-          - M
-          - FT
-          description: Unit of dimension.
-    Weight:
-      type: object
-      properties:
-        value:
-          type: number
-          description: Weight value.
-        weightUnit:
-          type: string
-          enum:
-          - G
-          - KG
-          - LB
-          - OZ
-          description: Unit of weight.
-      required:
-      - value
-      - weightUnit
-    Address:
-      type: object
-      properties:
-        address1:
-          type: string
-          description: Address line 1.
-        address2:
-          type: string
-          description: Address line 2.
-        address3:
-          type: string
-          description: Address line 3.
-        city:
-          type: string
-          description: City.
-        province:
-          type: string
-          description: Province or state code.
-        postalCode:
-          type: string
-          description: Postal or ZIP code.
-        country:
-          type: string
-          description: Country code (e.g. CA, US).
-        latitude:
-          type: number
-          description: Latitude.
-        longitude:
-          type: number
-          description: Longitude.
-      required:
-      - address1
-      - city
-      - province
-      - postalCode
-      - country
   securitySchemes:
     bearerAuth:
       type: http
