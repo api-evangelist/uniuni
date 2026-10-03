@@ -132,6 +132,56 @@ components:
       required:
       - value
       - weightUnit
+    TrackingResponseData:
+      type: object
+      properties:
+        trackingId:
+          type: string
+          description: Shipment tracking ID.
+        status:
+          type: string
+          description: Current shipment status.
+        statusCode:
+          type: integer
+          description: Internal status code.
+        orderNumber:
+          type: string
+          description: Order number.
+        labelCreatedAt:
+          type: integer
+          description: Unix timestamp (ms) when label was created.
+        recipient:
+          type: object
+          properties:
+            fullName:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+              format: email
+          required:
+          - fullName
+        destination:
+          $ref: '#/components/schemas/Address'
+        batchId:
+          type: string
+        note:
+          type: string
+        signatureRequired:
+          type: boolean
+        weight:
+          $ref: '#/components/schemas/Weight'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingEvent'
+      required:
+      - trackingId
+      - status
+      - orderNumber
     Address:
       type: object
       properties:
@@ -195,56 +245,6 @@ components:
         description:
           type: string
           description: Additional notes about the event.
-    TrackingResponseData:
-      type: object
-      properties:
-        trackingId:
-          type: string
-          description: Shipment tracking ID.
-        status:
-          type: string
-          description: Current shipment status.
-        statusCode:
-          type: integer
-          description: Internal status code.
-        orderNumber:
-          type: string
-          description: Order number.
-        labelCreatedAt:
-          type: integer
-          description: Unix timestamp (ms) when label was created.
-        recipient:
-          type: object
-          properties:
-            fullName:
-              type: string
-            phone:
-              type: string
-            email:
-              type: string
-              format: email
-          required:
-          - fullName
-        destination:
-          $ref: '#/components/schemas/Address'
-        batchId:
-          type: string
-        note:
-          type: string
-        signatureRequired:
-          type: boolean
-        weight:
-          $ref: '#/components/schemas/Weight'
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrackingEvent'
-      required:
-      - trackingId
-      - status
-      - orderNumber
   securitySchemes:
     bearerAuth:
       type: http

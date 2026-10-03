@@ -520,106 +520,6 @@ paths:
                     data: null
 components:
   schemas:
-    Dimensions:
-      type: object
-      properties:
-        length:
-          type: number
-          description: Length.
-        width:
-          type: number
-          description: Width.
-        height:
-          type: number
-          description: Height.
-        dimensionUnit:
-          type: string
-          enum:
-          - CM
-          - INCH
-          - M
-          - FT
-          description: Unit of dimension.
-    Weight:
-      type: object
-      properties:
-        value:
-          type: number
-          description: Weight value.
-        weightUnit:
-          type: string
-          enum:
-          - G
-          - KG
-          - LB
-          - OZ
-          description: Unit of weight.
-      required:
-      - value
-      - weightUnit
-    PurchaseShipmentResponseData:
-      type: object
-      properties:
-        trackingId:
-          type: string
-          description: Shipment tracking ID.
-        orderNumber:
-          type: string
-          description: Order number.
-        insuranceCreated:
-          type: boolean
-          description: Whether parcel protection was created.
-      required:
-      - trackingId
-      - orderNumber
-    ListShipmentsResponseData:
-      type: object
-      properties:
-        shipments:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentResponseData'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-      required:
-      - shipments
-      - pagination
-    Address:
-      type: object
-      properties:
-        address1:
-          type: string
-          description: Address line 1.
-        address2:
-          type: string
-          description: Address line 2.
-        address3:
-          type: string
-          description: Address line 3.
-        city:
-          type: string
-          description: City.
-        province:
-          type: string
-          description: Province or state code.
-        postalCode:
-          type: string
-          description: Postal or ZIP code.
-        country:
-          type: string
-          description: Country code (e.g. CA, US).
-        latitude:
-          type: number
-          description: Latitude.
-        longitude:
-          type: number
-          description: Longitude.
-      required:
-      - address1
-      - city
-      - province
-      - postalCode
-      - country
     ShipmentResponseData:
       type: object
       properties:
@@ -660,93 +560,6 @@ components:
       - trackingId
       - status
       - createdAt
-    ShipmentStatus:
-      type: string
-      enum:
-      - DRAFT
-      - PENDING
-      - PENDING_REVIEW
-      - PICKUP_REQUESTED
-      - PICKUP_CANCELLED
-      - PARTNER_RECEIVED
-      - PICKED_UP
-      - RECEIVED
-      - GATEWAY_TRANSIT
-      - PARCEL_SCANNED
-      - TRANSSHIPMENT_COMPLETE
-      - IN_TRANSIT
-      - OUT_FOR_DELIVERY
-      - DELIVERED
-      - SHIPMENT_EXCEPTION
-      - AGED_OUT
-      - RETURNED
-      - CANCELLED
-      - STORAGE
-      - FAILED
-      - FAILED_DELIVERY1
-      - FAILED_DELIVERY2
-      - GATEWAY_TO_GATEWAY_TRANSIT
-      - GATEWAY_TRANSIT_OUT
-      description: Shipment status.
-    PricingQuoteResponseData:
-      type: object
-      properties:
-        rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rate'
-          description: List of estimated rates. May be empty if no service is available for the given inputs.
-        carrierName:
-          type: string
-        estimated:
-          type: boolean
-        disclaimer:
-          type: string
-      required:
-      - rates
-      - carrierName
-      - estimated
-      - disclaimer
-    CreateShipmentRequest:
-      type: object
-      properties:
-        recipient:
-          $ref: '#/components/schemas/Recipient'
-          description: Recipient details. Provide phone, email, or both.
-        address:
-          $ref: '#/components/schemas/Address'
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-          description: Package dimensions. Provide either dimensions or packagingId, not both. If neither is provided, a saved default packaging preset will be used. If there are no saved packaging presets, dimensions are required.
-        packagingId:
-          type: integer
-          description: ID of a pre-configured packaging profile. Use instead of dimensions if the package matches a saved profile.
-        weight:
-          $ref: '#/components/schemas/Weight'
-        postageType:
-          $ref: '#/components/schemas/PostageType'
-        note:
-          type: string
-          maxLength: 200
-          description: Optional note, up to 200 characters.
-        insuranceRequired:
-          type: boolean
-          description: Whether parcel protection (insurance) is required for this shipment.
-        shipmentLineItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentLineItem'
-          minItems: 1
-          description: Line items describing the contents. Must contain at least one item.
-        orderNumber:
-          type: string
-          description: Optional client-provided order reference.
-      required:
-      - recipient
-      - address
-      - weight
-      - shipmentLineItems
-      - postageType
     BillingSummary:
       type: object
       properties:
@@ -780,25 +593,70 @@ components:
           $ref: '#/components/schemas/ShipmentResponseData'
       required:
       - shipment
-    Recipient:
+    PurchaseShipmentResponseData:
       type: object
       properties:
-        name:
+        trackingId:
           type: string
-          description: Recipient name.
-        phone:
+          description: Shipment tracking ID.
+        orderNumber:
           type: string
-          description: Recipient phone number.
-        email:
-          type: string
-          format: email
-          description: Recipient email.
-        signature:
+          description: Order number.
+        insuranceCreated:
           type: boolean
-          default: false
-          description: Whether signature is required on delivery.
+          description: Whether parcel protection was created.
       required:
-      - name
+      - trackingId
+      - orderNumber
+    PostageType:
+      type: string
+      enum:
+      - PUBLICATION
+      - SAME DAY
+      - NEXT DAY
+      - STANDARD
+      - USPS Ground Advantage
+      - PostNL International Packet Tracked
+      - OTHER
+      description: Preferred postage type. Domestic shipments typically use SAME DAY, NEXT DAY, or STANDARD. Cross-border CA→US shipments use USPS Ground Advantage (DDP) or PostNL International Packet Tracked (DDU). If the requested type is unavailable, an available type is selected automatically.
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        count:
+          type: integer
+          description: Total number of records.
+    ShipmentStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PENDING
+      - PENDING_REVIEW
+      - PICKUP_REQUESTED
+      - PICKUP_CANCELLED
+      - PARTNER_RECEIVED
+      - PICKED_UP
+      - RECEIVED
+      - GATEWAY_TRANSIT
+      - PARCEL_SCANNED
+      - TRANSSHIPMENT_COMPLETE
+      - IN_TRANSIT
+      - OUT_FOR_DELIVERY
+      - DELIVERED
+      - SHIPMENT_EXCEPTION
+      - AGED_OUT
+      - RETURNED
+      - CANCELLED
+      - STORAGE
+      - FAILED
+      - FAILED_DELIVERY1
+      - FAILED_DELIVERY2
+      - GATEWAY_TO_GATEWAY_TRANSIT
+      - GATEWAY_TRANSIT_OUT
+      description: Shipment status.
     ShipmentLineItem:
       type: object
       properties:
@@ -868,17 +726,63 @@ components:
       - quantity
       - unit_value
       - currency
-    PostageType:
-      type: string
-      enum:
-      - PUBLICATION
-      - SAME DAY
-      - NEXT DAY
-      - STANDARD
-      - USPS Ground Advantage
-      - PostNL International Packet Tracked
-      - OTHER
-      description: Preferred postage type. Domestic shipments typically use SAME DAY, NEXT DAY, or STANDARD. Cross-border CA→US shipments use USPS Ground Advantage (DDP) or PostNL International Packet Tracked (DDU). If the requested type is unavailable, an available type is selected automatically.
+    CreateShipmentRequest:
+      type: object
+      properties:
+        recipient:
+          $ref: '#/components/schemas/Recipient'
+          description: Recipient details. Provide phone, email, or both.
+        address:
+          $ref: '#/components/schemas/Address'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+          description: Package dimensions. Provide either dimensions or packagingId, not both. If neither is provided, a saved default packaging preset will be used. If there are no saved packaging presets, dimensions are required.
+        packagingId:
+          type: integer
+          description: ID of a pre-configured packaging profile. Use instead of dimensions if the package matches a saved profile.
+        weight:
+          $ref: '#/components/schemas/Weight'
+        postageType:
+          $ref: '#/components/schemas/PostageType'
+        note:
+          type: string
+          maxLength: 200
+          description: Optional note, up to 200 characters.
+        insuranceRequired:
+          type: boolean
+          description: Whether parcel protection (insurance) is required for this shipment.
+        shipmentLineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItem'
+          minItems: 1
+          description: Line items describing the contents. Must contain at least one item.
+        orderNumber:
+          type: string
+          description: Optional client-provided order reference.
+      required:
+      - recipient
+      - address
+      - weight
+      - shipmentLineItems
+      - postageType
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          description: Weight value.
+        weightUnit:
+          type: string
+          enum:
+          - G
+          - KG
+          - LB
+          - OZ
+          description: Unit of weight.
+      required:
+      - value
+      - weightUnit
     Rate:
       type: object
       properties:
@@ -911,6 +815,112 @@ components:
       - estimated
       - minDeliveryDays
       - maxDeliveryDays
+    Address:
+      type: object
+      properties:
+        address1:
+          type: string
+          description: Address line 1.
+        address2:
+          type: string
+          description: Address line 2.
+        address3:
+          type: string
+          description: Address line 3.
+        city:
+          type: string
+          description: City.
+        province:
+          type: string
+          description: Province or state code.
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+        country:
+          type: string
+          description: Country code (e.g. CA, US).
+        latitude:
+          type: number
+          description: Latitude.
+        longitude:
+          type: number
+          description: Longitude.
+      required:
+      - address1
+      - city
+      - province
+      - postalCode
+      - country
+    Dimensions:
+      type: object
+      properties:
+        length:
+          type: number
+          description: Length.
+        width:
+          type: number
+          description: Width.
+        height:
+          type: number
+          description: Height.
+        dimensionUnit:
+          type: string
+          enum:
+          - CM
+          - INCH
+          - M
+          - FT
+          description: Unit of dimension.
+    ListShipmentsResponseData:
+      type: object
+      properties:
+        shipments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentResponseData'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - shipments
+      - pagination
+    Recipient:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Recipient name.
+        phone:
+          type: string
+          description: Recipient phone number.
+        email:
+          type: string
+          format: email
+          description: Recipient email.
+        signature:
+          type: boolean
+          default: false
+          description: Whether signature is required on delivery.
+      required:
+      - name
+    PricingQuoteResponseData:
+      type: object
+      properties:
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+          description: List of estimated rates. May be empty if no service is available for the given inputs.
+        carrierName:
+          type: string
+        estimated:
+          type: boolean
+        disclaimer:
+          type: string
+      required:
+      - rates
+      - carrierName
+      - estimated
+      - disclaimer
     PricingQuoteRequest:
       type: object
       properties:
@@ -935,16 +945,6 @@ components:
       - address
       - weight
       - postageType
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        count:
-          type: integer
-          description: Total number of records.
   securitySchemes:
     bearerAuth:
       type: http
