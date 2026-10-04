@@ -341,6 +341,75 @@ paths:
                     data: null
 components:
   schemas:
+    Batch:
+      type: object
+      properties:
+        batchNumber:
+          type: string
+          description: Unique batch identifier.
+        batchName:
+          type: string
+          description: Batch name.
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PICKUP_REQUESTED
+          - PICKUP_CANCELLED
+          - PARTNER_RECEIVED
+          - PICKED_UP
+          - RECEIVED
+          description: Batch status.
+        printedLabel:
+          type: boolean
+          description: Whether the batch label has been printed.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        shipmentCount:
+          type: integer
+          description: Number of shipments in the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of shipment order numbers.
+    CreateBatchRequest:
+      type: object
+      properties:
+        batchName:
+          type: string
+          description: Name for the batch.
+        shipments:
+          type: array
+          items:
+            type: string
+          description: List of order numbers to include. Only purchased shipments can be added.
+    ListBatchesResponseData:
+      type: object
+      properties:
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Batch'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - batches
+      - pagination
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        count:
+          type: integer
+          description: Total number of records.
     BatchMutationResponseData:
       type: object
       description: Partial batch summary returned after add/remove shipment operations.
@@ -369,16 +438,6 @@ components:
       - status
       - printedLabel
       - shipmentCount
-    BatchShipmentsRequest:
-      type: object
-      properties:
-        shipments:
-          type: array
-          items:
-            type: string
-          description: List of order numbers.
-      required:
-      - shipments
     BatchResponseData:
       type: object
       properties:
@@ -421,75 +480,16 @@ components:
       - status
       - printedLabel
       - shipmentCount
-    Batch:
+    BatchShipmentsRequest:
       type: object
       properties:
-        batchNumber:
-          type: string
-          description: Unique batch identifier.
-        batchName:
-          type: string
-          description: Batch name.
-        status:
-          type: string
-          enum:
-          - PENDING
-          - PICKUP_REQUESTED
-          - PICKUP_CANCELLED
-          - PARTNER_RECEIVED
-          - PICKED_UP
-          - RECEIVED
-          description: Batch status.
-        printedLabel:
-          type: boolean
-          description: Whether the batch label has been printed.
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        shipmentCount:
-          type: integer
-          description: Number of shipments in the batch.
         shipments:
           type: array
           items:
             type: string
-          description: List of shipment order numbers.
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        count:
-          type: integer
-          description: Total number of records.
-    CreateBatchRequest:
-      type: object
-      properties:
-        batchName:
-          type: string
-          description: Name for the batch.
-        shipments:
-          type: array
-          items:
-            type: string
-          description: List of order numbers to include. Only purchased shipments can be added.
-    ListBatchesResponseData:
-      type: object
-      properties:
-        batches:
-          type: array
-          items:
-            $ref: '#/components/schemas/Batch'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+          description: List of order numbers.
       required:
-      - batches
-      - pagination
+      - shipments
   securitySchemes:
     bearerAuth:
       type: http

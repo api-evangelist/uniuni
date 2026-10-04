@@ -78,6 +78,42 @@ paths:
       security: []
 components:
   schemas:
+    Address:
+      type: object
+      properties:
+        address1:
+          type: string
+          description: Address line 1.
+        address2:
+          type: string
+          description: Address line 2.
+        address3:
+          type: string
+          description: Address line 3.
+        city:
+          type: string
+          description: City.
+        province:
+          type: string
+          description: Province or state code.
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+        country:
+          type: string
+          description: Country code (e.g. CA, US).
+        latitude:
+          type: number
+          description: Latitude.
+        longitude:
+          type: number
+          description: Longitude.
+      required:
+      - address1
+      - city
+      - province
+      - postalCode
+      - country
     WebhookPayload:
       type: object
       properties:
@@ -141,42 +177,6 @@ components:
                     type: string
                     format: uri
                   description: Proof of delivery image URLs.
-    Address:
-      type: object
-      properties:
-        address1:
-          type: string
-          description: Address line 1.
-        address2:
-          type: string
-          description: Address line 2.
-        address3:
-          type: string
-          description: Address line 3.
-        city:
-          type: string
-          description: City.
-        province:
-          type: string
-          description: Province or state code.
-        postalCode:
-          type: string
-          description: Postal or ZIP code.
-        country:
-          type: string
-          description: Country code (e.g. CA, US).
-        latitude:
-          type: number
-          description: Latitude.
-        longitude:
-          type: number
-          description: Longitude.
-      required:
-      - address1
-      - city
-      - province
-      - postalCode
-      - country
   securitySchemes:
     bearerAuth:
       type: http

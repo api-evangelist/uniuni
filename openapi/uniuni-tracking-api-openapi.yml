@@ -95,6 +95,33 @@ paths:
                     data: null
 components:
   schemas:
+    TrackingEvent:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Shipment status string at time of event (e.g. `OUT_FOR_DELIVERY`, `DELIVERED`).
+        statusCode:
+          type: integer
+          description: Numeric status code corresponding to the status.
+        timestamp:
+          type: integer
+          description: Unix timestamp in milliseconds.
+        location:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Location name.
+            lat:
+              type: number
+              description: Latitude.
+            lng:
+              type: number
+              description: Longitude.
+        description:
+          type: string
+          description: Additional notes about the event.
     Dimensions:
       type: object
       properties:
@@ -115,6 +142,42 @@ components:
           - M
           - FT
           description: Unit of dimension.
+    Address:
+      type: object
+      properties:
+        address1:
+          type: string
+          description: Address line 1.
+        address2:
+          type: string
+          description: Address line 2.
+        address3:
+          type: string
+          description: Address line 3.
+        city:
+          type: string
+          description: City.
+        province:
+          type: string
+          description: Province or state code.
+        postalCode:
+          type: string
+          description: Postal or ZIP code.
+        country:
+          type: string
+          description: Country code (e.g. CA, US).
+        latitude:
+          type: number
+          description: Latitude.
+        longitude:
+          type: number
+          description: Longitude.
+      required:
+      - address1
+      - city
+      - province
+      - postalCode
+      - country
     Weight:
       type: object
       properties:
@@ -182,69 +245,6 @@ components:
       - trackingId
       - status
       - orderNumber
-    Address:
-      type: object
-      properties:
-        address1:
-          type: string
-          description: Address line 1.
-        address2:
-          type: string
-          description: Address line 2.
-        address3:
-          type: string
-          description: Address line 3.
-        city:
-          type: string
-          description: City.
-        province:
-          type: string
-          description: Province or state code.
-        postalCode:
-          type: string
-          description: Postal or ZIP code.
-        country:
-          type: string
-          description: Country code (e.g. CA, US).
-        latitude:
-          type: number
-          description: Latitude.
-        longitude:
-          type: number
-          description: Longitude.
-      required:
-      - address1
-      - city
-      - province
-      - postalCode
-      - country
-    TrackingEvent:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Shipment status string at time of event (e.g. `OUT_FOR_DELIVERY`, `DELIVERED`).
-        statusCode:
-          type: integer
-          description: Numeric status code corresponding to the status.
-        timestamp:
-          type: integer
-          description: Unix timestamp in milliseconds.
-        location:
-          type: object
-          properties:
-            name:
-              type: string
-              description: Location name.
-            lat:
-              type: number
-              description: Latitude.
-            lng:
-              type: number
-              description: Longitude.
-        description:
-          type: string
-          description: Additional notes about the event.
   securitySchemes:
     bearerAuth:
       type: http
