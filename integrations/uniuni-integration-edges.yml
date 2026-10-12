@@ -1,5 +1,5 @@
 generated: '2026-10-12'
-method: none
+method: searched
 source:
 - https://zapier.com/apps/uniuni/integrations
 - https://n8n.io/integrations/uniuni/
@@ -12,5 +12,16 @@ checked:
 - https://zapier.com/apps/uniuni/integrations
 summary: null
 marketplace_apps: []
-edges: []
+edges:
+- partner_name: 17track
+  partner: 17track
+  partner_match: aggregator
+  channel: partner-built
+  direction: partner-built
+  type: contract
+  relationship: carrier-coverage
+  evidence: https://res.17track.net/asset/carrier/info/apicarrier.all.json
+  detected_by: detect-carrier-edges.py
+  first_seen: '2026-10-12'
+  matched_by: domain:uniuni.com
 templates: []
